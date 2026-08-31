@@ -1,0 +1,20 @@
+{
+  "name": "datarheo.io",
+  "version": "1.0.0",
+  "description": "datarheo.io Lighting platform to move data",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://localhost:26831/Vrahad-Analytics/datarheo.io"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
