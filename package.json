@@ -1,7 +1,7 @@
 {
   "name": "datarheo.io",
   "version": "1.0.0",
-  "description": "datarheo.io Lighting platform to move data",
+  "description": "datarheo.io Lightning platform to move data",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://localhost:26831/Vrahad-Analytics/datarheo.io"
+    "url": "https://github.com/Vrahad-Analytics/datarheo.io"
   },
   "keywords": [],
   "author": "",
