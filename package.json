@@ -1,0 +1,21 @@
+{
+  "name": "datarheo.io",
+  "version": "1.0.0",
+  "description": "datarheo.io Lightning platform to move data",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Vrahad-Analytics/datarheo.io"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.0"
+  }
+}
