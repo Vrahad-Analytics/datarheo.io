@@ -1,0 +1,212 @@
+/* =========================================================
+   Motion layer — loads last so it can refine, never relayout.
+   Every effect here degrades to nothing under
+   prefers-reduced-motion (handled globally in index.css).
+   ========================================================= */
+
+/* ---------- Brand mark ---------- */
+.brand-logo img {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.brand-logo:hover img {
+  transform: rotate(-8deg) scale(1.1);
+}
+
+/* ---------- Nav link underline ---------- */
+.nav-links > a,
+.nav-mega-trigger {
+  position: relative;
+}
+
+.nav-links > a::after,
+.nav-mega-trigger::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--blue);
+  transition: width 0.24s ease;
+}
+
+.nav-links > a:hover::after,
+.nav-mega-trigger:hover::after,
+.nav-mega-trigger.is-open::after {
+  width: 100%;
+}
+
+/* ---------- Primary button sheen ---------- */
+.cta {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.cta::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -70%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-18deg);
+  transition: left 0.6s ease;
+  z-index: -1;
+}
+
+.cta:hover::after {
+  left: 130%;
+}
+
+/* ---------- Staggered reveals ---------- */
+.reveal.is-visible .stat-item,
+.reveal.is-visible .governance-card,
+.reveal.is-visible .pricing-card,
+.reveal.is-visible .connector-card,
+.reveal.is-visible .faq-item {
+  animation: cardReveal 0.5s ease both;
+}
+
+.reveal.is-visible .stat-item:nth-child(2),
+.reveal.is-visible .governance-card:nth-child(2),
+.reveal.is-visible .pricing-card:nth-child(2),
+.reveal.is-visible .connector-card:nth-child(2),
+.reveal.is-visible .faq-item:nth-child(2) { animation-delay: 0.06s; }
+
+.reveal.is-visible .stat-item:nth-child(3),
+.reveal.is-visible .governance-card:nth-child(3),
+.reveal.is-visible .pricing-card:nth-child(3),
+.reveal.is-visible .connector-card:nth-child(3),
+.reveal.is-visible .faq-item:nth-child(3) { animation-delay: 0.12s; }
+
+.reveal.is-visible .stat-item:nth-child(4),
+.reveal.is-visible .governance-card:nth-child(4),
+.reveal.is-visible .connector-card:nth-child(4),
+.reveal.is-visible .faq-item:nth-child(4) { animation-delay: 0.18s; }
+
+.reveal.is-visible .connector-card:nth-child(n + 5),
+.reveal.is-visible .faq-item:nth-child(n + 5) { animation-delay: 0.24s; }
+
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- Feature bullets tick in ---------- */
+.reveal.is-visible .feature-bullets li {
+  animation: bulletIn 0.45s ease both;
+}
+
+.reveal.is-visible .feature-bullets li:nth-child(2) { animation-delay: 0.09s; }
+.reveal.is-visible .feature-bullets li:nth-child(3) { animation-delay: 0.18s; }
+
+@keyframes bulletIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- Section heading accents ---------- */
+.section-head .eyebrow,
+.feature-copy .eyebrow {
+  position: relative;
+}
+
+.governance-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.governance-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--blue-500);
+  transition: width 0.35s ease;
+}
+
+.governance-card:hover::after {
+  width: 100%;
+}
+
+/* ---------- Connector card signal ---------- */
+.connector-card:not(.connector-card--more) {
+  position: relative;
+}
+
+.connector-card:not(.connector-card--more)::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.connector-card:not(.connector-card--more):hover::after {
+  opacity: 1;
+  animation: connectorSignal 1.6s ease-in-out infinite;
+}
+
+@keyframes connectorSignal {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 163, 127, 0.45); }
+  50% { box-shadow: 0 0 0 6px rgba(16, 163, 127, 0); }
+}
+
+.more-badge {
+  animation: moreBadgePulse 3s ease-in-out infinite;
+}
+
+@keyframes moreBadgePulse {
+  50% { transform: scale(1.07) rotate(4deg); }
+}
+
+/* ---------- Footer mark ---------- */
+.site-footer .footer-logo {
+  animation: footerLogoFloat 4.5s ease-in-out infinite;
+}
+
+@keyframes footerLogoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* ---------- Closing CTA glow ---------- */
+.closing-cta::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 720px;
+  height: 720px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 115, 255, 0.28) 0%, rgba(0, 115, 255, 0) 65%);
+  pointer-events: none;
+  animation: ctaGlow 9s ease-in-out infinite;
+}
+
+.closing-cta > .shell {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes ctaGlow {
+  0%, 100% { opacity: 0.65; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.12); }
+}

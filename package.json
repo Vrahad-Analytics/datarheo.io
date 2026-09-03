@@ -1,21 +1,23 @@
 {
-  "name": "datarheo.io",
+  "name": "datarheo-io-react",
+  "private": true,
   "version": "1.0.0",
-  "description": "datarheo.io Lightning platform to move data",
-  "main": "server.js",
+  "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Vrahad-Analytics/datarheo.io"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "express": "^5.2.1",
-    "express-rate-limit": "^8.7.0"
+    "bootstrap": "^5.3.3",
+    "ogl": "^1.0.11",
+    "react": "^18.3.1",
+    "react-bootstrap": "^2.10.4",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.1"
   }
 }
