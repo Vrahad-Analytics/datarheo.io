@@ -78,7 +78,7 @@
 
 .split-login-panel {
   flex: 1 1 45%;
-  background: linear-gradient(160deg, var(--navy-700), var(--navy-900));
+  background: linear-gradient(160deg, var(--blue), var(--blue-dark));
   color: var(--white);
   padding: 4rem 3rem;
   display: flex;
@@ -94,7 +94,7 @@
   width: 260px;
   height: 260px;
   border-radius: 50%;
-  background: var(--blue-300);
+  background: var(--yellow);
   opacity: 0.15;
   top: -80px;
   right: -80px;
@@ -135,7 +135,7 @@
 
 .split-login-panel li::before {
   content: "âœ“";
-  color: var(--blue-300);
+  color: var(--yellow);
   font-weight: bold;
 }
 
@@ -189,7 +189,7 @@
 .login-story-panel h2 span:nth-child(2) { animation-delay: 0.16s; }
 
 .login-story-panel h2 span:nth-child(2) {
-  background: linear-gradient(90deg, #fff 0%, var(--blue-300) 45%, #fff 80%);
+  background: linear-gradient(90deg, #fff 0%, var(--yellow) 45%, #fff 80%);
   background-size: 220% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -198,7 +198,7 @@
 }
 
 .login-story-kicker {
-  color: var(--blue-300) !important;
+  color: var(--yellow) !important;
   font-size: 0.76rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -227,7 +227,7 @@
   content: "";
   position: absolute;
   inset: 28px;
-  border: 1px dashed rgba(143, 192, 255, 0.55);
+  border: 1px dashed rgba(249, 214, 60, 0.55);
   border-radius: inherit;
 }
 
@@ -238,13 +238,13 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--blue-300);
-  box-shadow: 0 0 0 6px rgba(143, 192, 255, 0.15), 0 0 22px rgba(143, 192, 255, 0.8);
+  background: var(--yellow);
+  box-shadow: 0 0 0 6px rgba(249, 214, 60, 0.15), 0 0 22px rgba(249, 214, 60, 0.8);
 }
 
 .login-story-dot--one { top: 15px; left: 44px; }
 .login-story-dot--two { top: 116px; right: -7px; background: #fff; box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.12), 0 0 22px rgba(255, 255, 255, 0.7); }
-.login-story-dot--three { bottom: 27px; left: 13px; background: var(--blue-light); box-shadow: 0 0 0 6px rgba(61, 148, 255, 0.16), 0 0 22px rgba(61, 148, 255, 0.8); }
+.login-story-dot--three { bottom: 27px; left: 13px; background: var(--blue-light); box-shadow: 0 0 0 6px rgba(91, 155, 216, 0.16), 0 0 22px rgba(91, 155, 216, 0.8); }
 
 @keyframes storyLineIn {
   from { opacity: 0; transform: translateY(18px); }
@@ -288,7 +288,7 @@
   inset: -2px;
   z-index: -1;
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(143, 192, 255, 0.55), rgba(0, 115, 255, 0.35), rgba(143, 192, 255, 0.55));
+  background: linear-gradient(135deg, rgba(249, 214, 60, 0.55), rgba(53, 128, 195, 0.35), rgba(249, 214, 60, 0.55));
   background-size: 200% 200%;
   filter: blur(10px);
   opacity: 0.45;
@@ -306,7 +306,7 @@
 }
 
 .login-form .form-control:not(:placeholder-shown) {
-  border-color: rgba(0, 115, 255, 0.6);
+  border-color: rgba(53, 128, 195, 0.6);
 }
 
 /* ============ Animated solo login (no side panel) ============ */
@@ -345,7 +345,7 @@
 .login-blob--1 {
   width: 320px;
   height: 320px;
-  background: var(--blue-500);
+  background: var(--yellow);
   top: -80px;
   left: -60px;
   animation: drift 11s ease-in-out infinite alternate;
@@ -406,7 +406,7 @@
 
 .login-input:focus {
   transform: translateY(-1px);
-  box-shadow: 0 0 0 4px rgba(0, 115, 255, 0.18);
+  box-shadow: 0 0 0 4px rgba(53, 128, 195, 0.18);
 }
 
 /* Button: shine sweep on hover + lift, reusing existing .cta styles */
@@ -465,26 +465,3 @@
   }
 }
 
-
-/* ---------- Shared by the login decorations (previously in home.css) ---------- */
-@keyframes drift {
-  from { transform: translate(0, 0) scale(1); }
-  to { transform: translate(24px, -20px) scale(1.08); }
-}
-
-.simple-footer {
-  padding: 1.75rem 1.5rem;
-  text-align: center;
-  background: var(--paper-alt);
-  border-top: 1px solid var(--line);
-}
-
-.simple-footer p {
-  margin: 0;
-  font-size: 0.86rem;
-  color: var(--ink-secondary);
-}
-
-.login-submit {
-  width: 100%;
-}

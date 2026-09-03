@@ -1,6 +1,11 @@
-import { useState } from 'react';
-import { Form, Button, Spinner } from 'react-bootstrap';
+import { createElement, useState } from 'react';
 import SiteNavbar from '../components/SiteNavbar.jsx';
+
+const Form = ({ children, ...props }) => <form {...props}>{children}</form>;
+Form.Label = ({ children, ...props }) => <label {...props}>{children}</label>;
+Form.Control = ({ as = 'input', className = '', ...props }) => createElement(as, { ...props, className: `form-control ${className}`.trim() });
+const Button = ({ children, ...props }) => <button {...props}>{children}</button>;
+const Spinner = ({ className = '' }) => <span className={className} aria-hidden="true" />;
 
 export default function Login() {
   const [businessId, setBusinessId] = useState('');

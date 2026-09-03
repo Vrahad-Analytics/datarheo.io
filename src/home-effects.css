@@ -1,0 +1,51 @@
+/* Home page ambient motion and visual effects. */
+.home-background {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.home-background-orb {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  filter: blur(2px);
+  opacity: .45;
+  animation: homeBackgroundFloat 18s ease-in-out infinite alternate;
+}
+
+.home-background-orb--one {
+  width: 260px;
+  height: 260px;
+  top: 18%;
+  left: -150px;
+  background: radial-gradient(circle, rgba(53, 128, 195, .18), transparent 68%);
+}
+
+.home-background-orb--two {
+  width: 310px;
+  height: 310px;
+  top: 47%;
+  right: -175px;
+  background: radial-gradient(circle, rgba(249, 214, 60, .22), transparent 68%);
+  animation-delay: -7s;
+}
+
+.home-background-orb--three {
+  width: 210px;
+  height: 210px;
+  bottom: 7%;
+  left: 20%;
+  background: radial-gradient(circle, rgba(53, 128, 195, .13), transparent 70%);
+  animation-delay: -12s;
+}
+
+@keyframes homeBackgroundFloat {
+  to { transform: translate(80px, -45px) scale(1.18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-background-orb { animation: none; }
+}

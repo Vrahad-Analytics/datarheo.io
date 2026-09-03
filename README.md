@@ -1,21 +1,17 @@
 # datarheo.io
 
-A React and Vite marketing site for Datarheo, focused on automated data movement between the systems a team already runs and the warehouse it analyses in.
+A React and Vite marketing site for Datarheo, focused on data movement, integration, pipelines, and connected systems.
 
 ## Stack
 
 - React 18
 - Vite 5
 - React Router
-- Bootstrap and React Bootstrap
 - Page-specific CSS and an animated theme layer
 
 ## Pages
 
-- `/` — Home page: navy hero, tech-stack marquee, capability stats, alternating
-  platform feature rows with product UI mockups, animated flow diagram, interactive
-  pipeline control centre, connector directory with search, governance band, pricing,
-  FAQ, closing CTA, and contact form
+- `/` — Home page with product overview, connectors, workflow examples, pricing, FAQ, and contact form
 - `/login` — Business ID sign-in page
 
 ## Project structure
@@ -48,8 +44,7 @@ npm install
 npm run dev
 ```
 
-Vite prints the local development URL in the terminal. This project pins the dev server
-to port 3000 in `vite.config.js`, so it is normally `http://localhost:3000`.
+The development server opens the site automatically at `http://localhost:3000`.
 
 ## Available scripts
 
@@ -63,13 +58,8 @@ npm run preview  # Preview the production build locally
 
 The stylesheet import order in `src/main.jsx` is intentional:
 
-1. `index.css` supplies the design tokens (navy/blue palette, radii, shadows),
-   base typography, and the shared navigation.
+1. `index.css` supplies global tokens and shared styles.
 2. `home.css` and `login.css` supply page-specific layout.
-3. `animations.css` loads last and only refines — it adds motion and hover
-   detail, never layout, so removing it leaves the pages intact.
-
-Headings deliberately do not set a colour of their own; they inherit, so a section
-that sets `color` on a dark background carries its headings with it.
+3. `animations.css` loads last so motion and visual theme overrides take precedence.
 
 Motion respects the user's `prefers-reduced-motion` setting.
