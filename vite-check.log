@@ -1,0 +1,55 @@
+
+  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m858[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m4173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.56.1:[1m4173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.0.128:[1m4173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.19.16.1:[1m4173[22m/[39m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+[2m10:53:41 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/home.css[22m
+[2m10:53:41 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/home.css[22m
+[2m10:53:53 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/home.css[22m
+[2m10:56:32 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/home.css[22m
+[2m10:56:45 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/home.css[22m
+[2m10:58:44 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:00:16 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:02:28 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/SiteNavbar.jsx[22m
+[2m11:02:28 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:02:35 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:02:35 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/SiteNavbar.jsx[22m
+[2m11:07:03 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:07:05 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:07:43 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:07:52 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:08:14 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:09:23 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:10:30 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:10:56 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:11:40 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:15:19 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:19:11 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:19:13 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:20:07 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/home.css[22m
+[2m11:20:16 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/home.css[22m
+[2m11:21:08 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:21:10 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:21:14 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:21:16 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:22:30 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/home.css[22m
+[2m11:22:33 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/home.css[22m
+[2m11:22:36 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/animations.css[22m
+[2m11:22:42 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/animations.css[22m
+[2m11:22:44 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/animations.css[22m
+[2m11:27:46 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/DataFlowAnimation.jsx[22m
+[2m11:27:46 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/home.css[22m
+[2m11:27:52 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/DataFlowAnimation.jsx[22m
+[2m11:28:13 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/DataFlowAnimation.jsx[22m
+[2m11:28:13 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/home.css[22m
+[2m11:28:52 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/DataFlowAnimation.jsx[22m
+[2m11:28:52 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/home.css[22m
+[2m11:29:24 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/home.css[22m
+[2m11:29:24 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/DataFlowAnimation.jsx[22m
+[2m11:30:18 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/SiteNavbar.jsx[22m
+[2m11:30:18 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:30:44 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/SiteNavbar.jsx[22m
+[2m11:30:44 am[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m

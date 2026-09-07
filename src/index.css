@@ -37,6 +37,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 90px;
 }
 
 body {
@@ -45,6 +46,10 @@ body {
   line-height: 1.6;
   background: var(--paper);
   margin: 0;
+}
+
+main > section {
+  scroll-margin-top: 90px;
 }
 
 /* Respect users who don't want motion */
@@ -71,7 +76,12 @@ body {
 .navbar-brand-custom .container-fluid {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  gap: 1rem;
+  position: relative;
 }
 
 .navbar-brand-custom.scrolled {
@@ -86,6 +96,8 @@ body {
   color: var(--ink);
   font-size: 1.3rem;
   font-weight: bold;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .brand-logo img {
@@ -98,11 +110,25 @@ body {
   font-style: normal;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
 .nav-links a {
   color: var(--ink);
   text-decoration: none;
-  margin-left: 1.5rem;
   transition: color 0.2s ease;
+  font-size: 0.92rem;
+  white-space: nowrap;
 }
 
 .nav-links a:hover {
@@ -113,16 +139,152 @@ body {
   background-color: var(--yellow);
   color: var(--dark);
   padding: 0.5rem 1.25rem;
-  border-radius: 4px;
+  border-radius: 999px;
   text-decoration: none;
   font-weight: bold;
   transition: transform 0.15s ease, opacity 0.2s ease;
   border: none;
   display: inline-block;
+  white-space: nowrap;
 }
 
 .login-btn:hover {
   opacity: 0.85;
   transform: translateY(-2px);
   color: var(--dark);
+}
+
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--white);
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.mobile-menu-toggle span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin: 0 auto;
+  background: var(--ink);
+  border-radius: 999px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.mobile-menu-toggle.is-open span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.mobile-menu-toggle.is-open span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-toggle.is-open span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0 1rem 1rem;
+  position: absolute;
+  right: 2rem;
+  top: 100%;
+  width: 220px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--white);
+  box-shadow: 0 12px 28px rgba(23, 32, 42, 0.14);
+}
+
+.mobile-nav a {
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.mobile-nav.is-open {
+  display: flex;
+}
+
+@media (max-width: 767px) {
+  .navbar-brand-custom {
+    padding: 1rem 1.1rem;
+  }
+
+  .navbar-brand-custom .container-fluid {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-width: 0;
+    min-height: 42px;
+  }
+
+  .brand-logo {
+    min-width: 0;
+    gap: clamp(0.35rem, 1.2vw, 0.5rem);
+    font-size: clamp(1rem, 3.2vw, 1.25rem);
+    flex: 1 1 auto;
+    overflow: hidden;
+  }
+
+  .brand-logo img {
+    height: clamp(30px, 8vw, 40px);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.7rem;
+    margin-left: auto;
+    flex: 0 0 auto;
+    min-width: 0;
+    white-space: nowrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header-actions > .nav-links {
+    display: none;
+  }
+
+  .login-btn {
+    margin-left: 0;
+    padding: clamp(0.5rem, 1.5vw, 0.62rem) clamp(0.75rem, 2.5vw, 1rem);
+    border: 2px solid var(--yellow);
+    border-radius: 10px;
+    background: var(--yellow);
+    color: var(--dark);
+    font-size: clamp(0.75rem, 2.2vw, 0.85rem);
+    order: 1;
+  }
+
+  .mobile-menu-toggle {
+    display: flex;
+    order: 2;
+    margin-left: 0;
+    width: 42px;
+    height: 42px;
+    border: 0;
+    background: transparent;
+  }
+
+  .mobile-nav {
+    right: 1.1rem;
+    width: min(220px, calc(100vw - 2.2rem));
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem 0.75rem;
+  }
 }

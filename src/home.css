@@ -1136,8 +1136,9 @@ main .differentiators h2::after {
 /* ============ Mobile responsiveness ============ */
 @media (max-width: 768px) {
   .navbar-brand-custom .container-fluid {
-    flex-direction: column;
-    gap: 1rem;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
   }
 
   .nav-links a {
@@ -1688,145 +1689,6 @@ main .differentiators h2::after {
   .sync-route-line { flex-basis: 32px; }
 }
 
-/* ============ Platform mega menu ============ */
-.nav-links { display: inline-flex; align-items: center; }
-.nav-mega-wrap { position: relative; display: inline-flex; }
-
-/* Invisible bridge keeps the menu open while moving the pointer downward. */
-.nav-mega-wrap::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  height: 1rem;
-}
-
-.nav-mega-trigger {
-  margin-left: 1.5rem;
-  padding: .58rem .82rem;
-  border: 0;
-  border-radius: 7px;
-  background: transparent;
-  color: var(--ink);
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background .2s ease, color .2s ease;
-}
-
-.nav-mega-trigger span { display: inline-block; margin-left: .35rem; transition: transform .2s ease; }
-.nav-mega-trigger:hover, .nav-mega-trigger.is-open { background: rgba(53, 128, 195, .13); color: var(--blue-dark); }
-.nav-mega-trigger.is-open span { transform: rotate(180deg); }
-
-.nav-mega-trigger .nav-chevron {
-  width: 7px;
-  height: 7px;
-  margin: 0 0 .18rem .42rem;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
-  transform: rotate(45deg);
-}
-
-.nav-mega-trigger.is-open .nav-chevron { transform: rotate(225deg); margin-bottom: -.12rem; }
-
-.platform-mega-menu {
-  position: absolute;
-  top: calc(100% + 1rem);
-  left: 0;
-  z-index: 1200;
-  width: min(690px, 78vw);
-  display: grid;
-  grid-template-columns: 1.15fr .85fr;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--white);
-  box-shadow: 0 22px 48px rgba(23, 32, 42, .16);
-  animation: megaMenuIn .22s ease both;
-}
-
-@keyframes megaMenuIn {
-  from { opacity: 0; transform: translateY(-8px) scale(.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.platform-mega-main { padding: 1.45rem; }
-.platform-mega-links { padding: 1.45rem; border-left: 1px solid var(--line); background: linear-gradient(180deg, #f8fbfe, var(--white)); }
-.mega-menu-label { margin: 0 0 .8rem; color: var(--ink-secondary); font-size: .68rem; font-weight: 700; letter-spacing: .1em; }
-
-.nav-links .mega-feature {
-  display: flex;
-  gap: .75rem;
-  margin: 0;
-  padding: .72rem;
-  border-radius: 9px;
-  color: var(--ink);
-  text-decoration: none;
-  transition: background .2s ease, transform .2s ease;
-  animation: megaItemIn .35s ease both;
-}
-
-.platform-mega-main .mega-feature:nth-of-type(2) { animation-delay: .04s; }
-.platform-mega-main .mega-feature:nth-of-type(3) { animation-delay: .08s; }
-.platform-mega-main .mega-feature:nth-of-type(4) { animation-delay: .12s; }
-.platform-mega-main .mega-feature:nth-of-type(5) { animation-delay: .16s; }
-
-@keyframes megaItemIn {
-  from { opacity: 0; transform: translateX(-10px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.mega-feature:hover { background: var(--paper); transform: translateX(3px); }
-.mega-feature--static { cursor: default; }
-.mega-feature--static:hover { background: transparent; transform: none; }
-.mega-menu-copy { margin: 0 0 1rem; color: var(--ink-secondary); font-size: .82rem; line-height: 1.55; }
-.mega-feature-icon { position: relative; flex: 0 0 33px; height: 33px; display: grid; place-items: center; border-radius: 9px; background: rgba(53,128,195,.13); color: var(--blue-dark); }
-.mega-feature-icon::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: -8px 7px 0 -1px currentColor, 8px -7px 0 -1px currentColor; }
-.mega-feature-icon::after { content: ""; position: absolute; width: 17px; height: 1px; background: currentColor; opacity: .55; transform: rotate(-40deg); }
-.mega-feature strong, .mega-feature small { display: block; }
-.mega-feature strong { margin-bottom: .12rem; font-size: .9rem; }
-.mega-feature small { color: var(--ink-secondary); font-size: .76rem; line-height: 1.35; }
-
-.mega-link-arrow {
-  flex: 0 0 7px;
-  width: 7px;
-  height: 7px;
-  margin: auto 0 auto auto;
-  border-top: 1.5px solid var(--blue);
-  border-right: 1.5px solid var(--blue);
-  transform: rotate(45deg);
-  transition: transform .2s ease;
-}
-
-.mega-feature:hover .mega-link-arrow { transform: rotate(45deg) translate(3px, -3px); }
-.text-arrow::before { content: "\\2192"; display: inline-block; margin-left: .2rem; transition: transform .2s ease; }
-.platform-mega-links > a:hover .text-arrow::before { transform: translateX(3px); }
-
-.nav-links .platform-mega-links > a {
-  display: block;
-  margin: 0;
-  padding: .48rem 0;
-  color: var(--ink);
-  font-size: .88rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: color .18s ease, transform .18s ease;
-}
-
-.platform-mega-links > a:hover { color: var(--blue); transform: translateX(4px); }
-
-.platform-mega-links > a:focus-visible,
-.mega-feature:focus-visible,
-.nav-mega-trigger:focus-visible {
-  outline: 3px solid rgba(53, 128, 195, .35);
-  outline-offset: 3px;
-}
-
-@media (max-width: 768px) {
-  .nav-mega-wrap { display: none; }
-}
-
 /* ============ Operations dashboard and FAQ ============ */
 .operations-section {
   max-width: 1000px;
@@ -1841,8 +1703,8 @@ main .differentiators h2::after {
 .operations-heading > p:not(.sync-eyebrow) { color: var(--ink-secondary); }
 
 .operations-layout {
-  display: grid;
-  grid-template-columns: .88fr 1.12fr;
+  display: flex;
+  align-items: stretch;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -1851,7 +1713,13 @@ main .differentiators h2::after {
   text-align: left;
 }
 
-.operations-tabs { padding: 1rem; background: linear-gradient(180deg, #f8fbfe, var(--paper)); }
+.operations-tabs {
+  flex: 0 0 320px;
+  padding: 1rem;
+  background: linear-gradient(180deg, #f8fbfe, var(--paper));
+  border-right: 1px solid var(--line);
+}
+
 .operation-tab {
   width: 100%;
   display: flex;
@@ -1880,7 +1748,17 @@ main .differentiators h2::after {
 .operation-tab-dot--yellow { background: var(--yellow); box-shadow: 0 0 0 5px rgba(249,214,60,.15); }
 .operation-tab-dot--green { background: var(--success); box-shadow: 0 0 0 5px rgba(46,125,50,.1); }
 
-.operations-display { position: relative; overflow: hidden; padding: 2.4rem; min-height: 280px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(140deg, var(--white), #edf6fd); }
+.operations-display {
+  position: relative;
+  flex: 1 1 auto;
+  overflow: hidden;
+  padding: 2.4rem;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(140deg, var(--white), #edf6fd);
+}
 .operations-display::before { content: ""; position: absolute; width: 250px; height: 250px; right: -90px; top: -100px; border-radius: 50%; background: rgba(53,128,195,.12); filter: blur(8px); animation: dashboardFloat 6s ease-in-out infinite alternate; }
 .operations-display--yellow { background: linear-gradient(140deg, var(--white), #fff9df); }
 .operations-display--yellow::before { background: rgba(249,214,60,.18); }
@@ -1899,7 +1777,7 @@ main .differentiators h2::after {
 @keyframes dataBar { to { transform: scaleY(.54); transform-origin: bottom; } }
 
 .faq-section { max-width: 1000px; margin: 4rem auto; padding: 0 2rem; display: grid; grid-template-columns: .8fr 1.2fr; gap: 3.5rem; align-items: start; }
-.faq-intro { position: sticky; top: 6rem; text-align: left; }.faq-intro h2 { color: var(--dark); margin-bottom: .8rem; }.faq-intro > p:not(.sync-eyebrow) { color: var(--ink-secondary); }
+.faq-intro { text-align: left; }.faq-intro h2 { color: var(--dark); margin-bottom: .8rem; }.faq-intro > p:not(.sync-eyebrow) { color: var(--ink-secondary); }
 .faq-list { display: flex; flex-direction: column; gap: .7rem; }
 .faq-item { overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: var(--white); transition: box-shadow .25s ease, border-color .25s ease; }
 .faq-item.is-open { border-color: rgba(53,128,195,.35); box-shadow: 0 10px 22px rgba(23,32,42,.06); }
@@ -1909,10 +1787,17 @@ main .differentiators h2::after {
 
 @media (max-width: 768px) {
   .operations-section { padding: 2.5rem 1rem; margin: 3rem auto; }
-  .operations-layout, .faq-section { grid-template-columns: 1fr; }
+  .operations-layout {
+    flex-direction: column;
+  }
+  .operations-tabs {
+    flex-basis: auto;
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
   .operations-display { min-height: 250px; }
   .faq-section { padding: 0 1rem; gap: 1.5rem; margin: 3rem auto; }
-  .faq-intro { position: static; }
 }
 
 /* ============ Contact motion polish ============ */
