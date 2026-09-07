@@ -386,17 +386,6 @@ main .differentiators h2,
 .nav-links > a:hover { background: var(--white); color: var(--blue); transform: translateY(-1px); }
 .nav-links > a::after { bottom: .18rem; }
 
-.nav-mega-trigger {
-  margin-left: 0;
-  padding: .42rem .7rem;
-  border-radius: 999px;
-  font-size: .88rem;
-}
-.nav-mega-trigger:hover, .nav-mega-trigger.is-open {
-  background: var(--white);
-  box-shadow: 0 3px 10px rgba(53,128,195,.1);
-}
-
 .login-btn {
   position: relative;
   overflow: hidden;
@@ -414,9 +403,6 @@ main .differentiators h2,
   transition: left .55s ease;
 }
 .login-btn:hover::before { left: 125%; }
-
-.platform-mega-menu { border-color: rgba(53,128,195,.18); border-radius: 18px; }
-.platform-mega-menu:has(.mega-feature--static) { width: min(520px, 78vw); display: block; }
 
 @media (max-width: 768px) {
   .navbar-brand-custom { padding: .45rem .8rem; }
