@@ -840,6 +840,7 @@
   border: 1px solid #1e334a;
   border-radius: var(--radius-md);
   padding: 1.25rem;
+  min-width: 0;
 }
 
 .telemetry-label {
@@ -858,11 +859,16 @@
   color: #ffffff;
   line-height: 1.1;
   margin-bottom: 0.25rem;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .telemetry-trend {
   font-size: 0.75rem;
   color: #64748b;
+  line-height: 1.45;
+  display: block;
 }
 
 .text-accent { color: #38bdf8 !important; }
@@ -2654,12 +2660,36 @@
   }
 
   .stage-telemetry-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .telemetry-value {
+    font-size: clamp(1.5rem, 4.5vw, 2.2rem);
   }
 
   .metrics-grid,
   .architecture-steps-grid {
     grid-template-columns: 1fr;
+  }
+
+  @media (max-width: 480px) {
+    .stage-telemetry-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .telemetry-box {
+      padding: 1rem 0.8rem;
+    }
+
+    .telemetry-label {
+      line-height: 1.4;
+      letter-spacing: 0.04em;
+    }
+
+    .telemetry-value {
+      font-size: clamp(1.5rem, 8vw, 2.2rem);
+      line-height: 1.05;
+    }
   }
 
   .form-row-2 {
