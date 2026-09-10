@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import ToolIcon from './ToolIcon.jsx';
 import { CONNECTOR_CATEGORIES, CONNECTORS_DATA } from '../data/connectorsData.js';
 
@@ -29,7 +30,7 @@ export default function ConnectorCatalog() {
   }, [selectedCategory, typeFilter, searchQuery]);
 
   return (
-    <section id="connectors" className="connector-catalog-section reveal">
+    <section id="connectors" className="connector-catalog-section reveal is-visible">
       <div className="section-container">
         <div className="section-header text-center">
           <div className="enterprise-badge">
@@ -237,7 +238,7 @@ export default function ConnectorCatalog() {
       </div>
 
       {/* Modal for Connector Specs */}
-      {activeModalConnector && (
+      {activeModalConnector && createPortal((
         <div
           className="connector-modal-backdrop"
           onClick={() => setActiveModalConnector(null)}
@@ -339,7 +340,7 @@ export default function ConnectorCatalog() {
             </div>
           </div>
         </div>
-      )}
+      ), document.body)}
     </section>
   );
 }

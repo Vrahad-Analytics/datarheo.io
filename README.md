@@ -51,7 +51,7 @@ The development server opens the site automatically at `http://localhost:3000`.
 ```bash
 npm run dev      # Start the development server
 npm run build    # Create a production build in dist/
-npm run preview  # Preview the production build locally
+npm run preview 
 ```
 
 ## Styling
