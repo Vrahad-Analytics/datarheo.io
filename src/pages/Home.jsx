@@ -239,8 +239,10 @@ export default function Home() {
             <div className="capabilities-cards-grid">
               {CAPABILITIES.map((cap) => (
                 <div key={cap.title} className="capability-card">
-                  <div className="cap-icon-wrap">{cap.icon}</div>
-                  <span className="cap-sub">{cap.subtitle}</span>
+                  <div className="cap-heading-row">
+                    <div className="cap-icon-wrap">{cap.icon}</div>
+                    <span className="cap-sub">{cap.subtitle}</span>
+                  </div>
                   <h3 className="cap-title">{cap.title}</h3>
                   <p className="cap-desc">{cap.description}</p>
                 </div>
@@ -367,7 +369,8 @@ export default function Home() {
         {/* ================= ENTERPRISE FAQ SECTION ================= */}
         <section id="faq" className="faq-section reveal" aria-labelledby="faq-title">
           <div className="section-container">
-            <div className="section-header text-center">
+            <div className="faq-intro-column">
+              <div className="section-header text-center">
               <div className="enterprise-badge">
                 <span className="badge-pulse" />
                 TECHNICAL ARCHITECTURE FAQ
@@ -378,6 +381,22 @@ export default function Home() {
               <p className="section-subtitle">
                 Everything technical leaders, data architects, and security officers need to know.
               </p>
+              </div>
+
+              <div className="faq-support-panel" aria-label="Platform highlights">
+              <div className="faq-support-item">
+                <span className="faq-support-icon">&#9889;</span>
+                <span><strong>Sub-second CDC</strong><small>Low-latency data movement</small></span>
+              </div>
+              <div className="faq-support-item">
+                <span className="faq-support-icon">&#10003;</span>
+                <span><strong>Enterprise ready</strong><small>SOC 2, HIPAA, and GDPR aligned</small></span>
+              </div>
+              <div className="faq-support-item">
+                <span className="faq-support-icon">&#8594;</span>
+                <span><strong>Talk to an architect</strong><small>Get answers for your data stack</small></span>
+              </div>
+              </div>
             </div>
 
             <div className="faq-accordion-wrap">

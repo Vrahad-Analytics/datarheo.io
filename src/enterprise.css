@@ -928,17 +928,22 @@
   background: #ffffff;
 }
 
+.capabilities-section .section-container {
+  max-width: none;
+  padding-inline: 2rem;
+}
+
 .capabilities-cards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  gap: 1.25rem;
 }
 
 .capability-card {
   background: #ffffff;
   border: 1px solid var(--light-border);
   border-radius: var(--radius-lg);
-  padding: 2.25rem;
+  padding: 1.5rem;
   box-shadow: var(--shadow-sm);
   transition: all 0.25s ease;
   position: relative;
@@ -950,34 +955,45 @@
   border-color: var(--primary-blue-light);
 }
 
+.cap-heading-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  margin-bottom: 0.85rem;
+}
+
 .cap-icon-wrap {
-  font-size: 2.2rem;
-  margin-bottom: 1.25rem;
-  display: inline-block;
+  flex: 0 0 auto;
+  font-size: 1.8rem;
+  line-height: 1;
 }
 
 .cap-sub {
-  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--primary-blue);
-  margin-bottom: 0.35rem;
+  line-height: 1.25;
 }
 
 .cap-title {
   font-size: 1.3rem;
   font-weight: 800;
   color: var(--text-main);
-  margin: 0 0 0.85rem;
+  margin: 0 0 0.65rem;
   line-height: 1.3;
 }
 
 .cap-desc {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--text-muted);
-  line-height: 1.6;
+  line-height: 1.5;
   margin: 0;
 }
 
@@ -1001,7 +1017,7 @@
 
 .catalog-search-wrap {
   flex: 1;
-  min-width: 320px;
+  min-width: 0;
   position: relative;
   display: flex;
   align-items: center;
@@ -1318,12 +1334,17 @@
   animation: fadeIn 0.2s ease;
 }
 
+/* Keep fixed connector dialogs relative to the viewport, not the reveal section. */
+.connector-catalog-section.reveal.is-visible {
+  transform: none;
+}
+
 .connector-modal {
   background: #ffffff;
   border-radius: var(--radius-xl);
   max-width: 640px;
   width: 100%;
-  max-height: 90vh;
+  max-height: calc(100vh - 3rem);
   overflow-y: auto;
   box-shadow: var(--shadow-xl);
   animation: scaleUp 0.2s ease;
@@ -1331,6 +1352,28 @@
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes scaleUp { from { transform: scale(0.95); } to { transform: scale(1); } }
+
+@media (max-width: 768px) {
+  .connector-modal-backdrop {
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  .connector-modal {
+    max-height: calc(100vh - 2rem);
+    border-radius: var(--radius-lg);
+  }
+
+  .connector-modal-header,
+  .connector-modal-body {
+    padding: 1.25rem;
+  }
+
+  .connector-modal-footer {
+    padding: 1rem 1.25rem;
+    flex-wrap: wrap;
+  }
+}
 
 .connector-modal-header {
   display: flex;
@@ -2006,13 +2049,83 @@
    FAQ ACCORDION
    ========================================================================== */
 .faq-section {
+  display: block;
+  max-width: none;
+  margin: 0;
   padding: 6.5rem 0;
   background: #ffffff;
 }
 
+.faq-section .section-container {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: start;
+  gap: 3.5rem;
+}
+
+.faq-section .section-header.text-center {
+  text-align: left;
+  margin-bottom: 0;
+}
+
+.faq-intro-column {
+  min-width: 0;
+}
+
+.faq-support-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-self: stretch;
+  padding-top: 0.5rem;
+}
+
+.faq-support-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--light-border);
+  border-radius: var(--radius-md);
+  background: var(--light-surface-subtle);
+}
+
+.faq-support-icon {
+  display: grid;
+  flex: 0 0 32px;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e0f2fe;
+  color: var(--primary-blue);
+  font-weight: 800;
+}
+
+.faq-support-item span:last-child {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.12rem;
+}
+
+.faq-support-item strong {
+  color: var(--text-main);
+  font-size: 0.9rem;
+}
+
+.faq-support-item small {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
 .faq-accordion-wrap {
-  max-width: 850px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -2032,6 +2145,7 @@
 }
 
 .faq-toggle-btn {
+  min-width: 0;
   width: 100%;
   display: flex;
   align-items: center;
@@ -2045,6 +2159,8 @@
 }
 
 .faq-q-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--text-main);
@@ -2066,6 +2182,49 @@
 
 .faq-answer-panel p {
   margin: 0;
+}
+
+@media (max-width: 768px) {
+  .faq-section .section-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .faq-section .section-header.text-center {
+    text-align: center;
+  }
+
+  .faq-support-panel {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .faq-section {
+    padding: 4rem 0;
+  }
+
+  .faq-section .section-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-inline: 1rem;
+  }
+
+  .faq-section .section-header.text-center {
+    text-align: center;
+  }
+
+  .faq-accordion-wrap {
+    width: 100%;
+  }
+
+  .faq-toggle-btn {
+    padding: 1rem;
+  }
+
+  .faq-q-text {
+    font-size: 0.98rem;
+  }
 }
 
 /* ==========================================================================
@@ -2400,6 +2559,96 @@
 }
 
 @media (max-width: 768px) {
+  .section-container {
+    padding-inline: 1rem;
+  }
+
+  .capabilities-section .section-container {
+    padding-inline: 1rem;
+  }
+
+  .section-header {
+    margin-bottom: 2.25rem;
+  }
+
+  .enterprise-badge {
+    max-width: 100%;
+    font-size: 0.68rem;
+    padding: 0.3rem 0.65rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.65rem, 7vw, 2.1rem);
+    line-height: 1.15;
+  }
+
+  .section-subtitle {
+    font-size: 0.96rem;
+    line-height: 1.55;
+  }
+
+  .capability-card {
+    padding: 1rem;
+  }
+
+  .cap-heading-row {
+    gap: 0.55rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .cap-icon-wrap {
+    font-size: 1.45rem;
+  }
+
+  .cap-sub {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.68rem;
+  }
+
+  .cap-title {
+    font-size: 1.05rem;
+  }
+
+  .cap-desc {
+    font-size: 0.82rem;
+  }
+
+  .catalog-search-input {
+    min-height: 46px;
+    font-size: 0.85rem;
+  }
+
+  .catalog-type-pills {
+    min-height: 46px;
+  }
+
+  .type-pill {
+    font-size: 0.76rem;
+  }
+
+  .cat-tab {
+    min-height: 42px;
+    padding-inline: 0.9rem;
+  }
+
+  .connector-card-v2 {
+    overflow: hidden;
+  }
+
+  .connector-card-custom p {
+    font-size: 0.78rem;
+  }
+
+  .cdk-content h3 {
+    font-size: 1.35rem;
+  }
+
+  .cdk-content p {
+    font-size: 0.9rem;
+  }
+
   .simulator-config-grid {
     grid-template-columns: 1fr;
   }
@@ -2428,5 +2677,159 @@
 
   .footer-links-grid {
     grid-template-columns: 1fr;
+  }
+  .connector-catalog-section {
+    padding: 4rem 0;
+  }
+
+  .catalog-controls {
+    align-items: stretch;
+  }
+
+  .catalog-search-wrap,
+  .catalog-type-pills {
+    width: 100%;
+  }
+
+  .catalog-type-pills {
+    justify-content: space-between;
+  }
+
+  .type-pill {
+    flex: 1;
+    padding-inline: 0.5rem;
+  }
+
+  .catalog-status-bar {
+    align-items: flex-start;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .connector-cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .connector-card-v2 {
+    min-width: 0;
+    min-height: 0;
+    padding: 0.85rem;
+    border-radius: var(--radius-md);
+  }
+
+  .connector-card-top {
+    gap: 0.4rem;
+  }
+
+  .connector-avatar {
+    width: 34px;
+    height: 34px;
+  }
+
+  .connector-pills {
+    min-width: 0;
+  }
+
+  .connector-badge-pill,
+  .connector-type-pill {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .connector-name {
+    font-size: 0.92rem;
+    line-height: 1.25;
+  }
+
+  .connector-desc {
+    font-size: 0.74rem;
+    line-height: 1.4;
+  }
+
+  .connector-card-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+  }
+
+  .connector-card-custom {
+    grid-column: 1 / -1;
+    width: 100%;
+    padding: 0.75rem;
+  }
+
+  .connector-card-custom h3 {
+    font-size: 0.92rem;
+    line-height: 1.25;
+  }
+
+  .custom-connector-action {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    width: 100%;
+    padding: 0.55rem 0.4rem;
+    border: 1px solid var(--primary-blue);
+    border-radius: var(--radius-md);
+    font-size: 0.74rem;
+    line-height: 1.2;
+    white-space: normal;
+  }
+
+  .cdk-banner {
+    padding: 2rem 1.25rem;
+  }
+}
+
+/* Compact section rhythm across the landing page. */
+.section-header {
+  margin-bottom: 2.25rem;
+}
+
+.enterprise-hero {
+  padding-block: 4.5rem 3rem;
+}
+
+.pipeline-simulator-section,
+.capabilities-section,
+.connector-catalog-section,
+.flow-architecture-section,
+.enterprise-comparison-section,
+.roi-calculator-section,
+.pricing-section,
+.faq-section,
+.contact-section {
+  padding-block: 4rem;
+}
+
+.connector-cards-grid {
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .section-header {
+    margin-bottom: 1.75rem;
+  }
+
+  .enterprise-hero {
+    padding-block: 3rem 2.25rem;
+  }
+
+  .pipeline-simulator-section,
+  .capabilities-section,
+  .connector-catalog-section,
+  .flow-architecture-section,
+  .enterprise-comparison-section,
+  .roi-calculator-section,
+  .pricing-section,
+  .faq-section,
+  .contact-section {
+    padding-block: 2.75rem;
   }
 }
