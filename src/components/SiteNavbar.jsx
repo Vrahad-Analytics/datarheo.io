@@ -8,7 +8,7 @@ export default function SiteNavbar({ variant = 'home' }) {
 
   return (
     <header className="navbar-brand-custom">
-      {/* Top micro-announcement bar */}
+      {variant === 'home' && <>
       <div className="navbar-top-announcement">
         <div className="container-fluid announcement-inner">
           <span className="announcement-badge">NEW</span>
@@ -20,6 +20,7 @@ export default function SiteNavbar({ variant = 'home' }) {
           </a>
         </div>
       </div>
+      </>}
 
       <div className="container-fluid nav-main-row">
         <Link to="/" className="brand-logo">
@@ -91,11 +92,13 @@ export default function SiteNavbar({ variant = 'home' }) {
             </nav>
           </>
         ) : (
-          <nav className="nav-links">
-            <Link to="/" className="back-link">
-              ← Return to Main Platform
-            </Link>
-          </nav>
+          <>
+            <nav className="nav-links">
+              <Link to="/" className="back-link">
+                ← Return to Main Platform
+              </Link>
+            </nav>
+          </>
         )}
       </div>
     </header>
