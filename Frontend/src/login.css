@@ -70,53 +70,6 @@
   text-decoration: none;
 }
 
-.login-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0.95rem 0 0.55rem;
-  color: var(--dark);
-  font-size: 0.9rem;
-}
-
-.login-divider::before,
-.login-divider::after {
-  display: none;
-}
-
-.login-provider-actions {
-  display: flex;
-  justify-content: center;
-  gap: 1.15rem;
-}
-
-.login-provider-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--dark);
-  text-decoration: none;
-  cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.login-provider-icon {
-  width: 2rem;
-  height: 2rem;
-  flex: 0 0 auto;
-}
-
-.login-provider-button:hover { transform: translateY(-2px) scale(1.06); background: rgba(53, 128, 195, 0.08); color: var(--dark); }
-
-.login-github-button { background: transparent; color: var(--dark); }
-.login-github-button:hover { color: var(--dark); background: rgba(23, 32, 42, 0.08); }
-
 .login-register-link { margin-top: 0.25rem; }
 
 .register-name-fields {
@@ -188,16 +141,6 @@
 }
 
 .register-page .register-form .login-submit { margin-top: 0.35rem; }
-
-@keyframes registerStoryIn {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes registerCardIn {
-  from { opacity: 0; transform: translateY(24px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
 
 /* Split-screen login (blue gradient, not black) */
 .split-login {
@@ -581,6 +524,9 @@
 @media (max-width: 768px) {
   .login-page {
     min-height: 100svh;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     background:
       radial-gradient(circle at 4% 72%, rgba(91, 155, 216, 0.24), transparent 30%),
       radial-gradient(circle at 96% 38%, rgba(249, 214, 60, 0.2), transparent 28%),
@@ -724,7 +670,7 @@
     flex: 1 0 auto;
     flex-direction: column;
     justify-content: flex-start;
-    overflow: hidden;
+    overflow: visible;
     width: min(444px, calc(100% - 1rem));
     margin: 0 auto;
     border: 1px solid rgba(255, 255, 255, 0.62);
@@ -806,17 +752,6 @@
   }
 
   .login-form { gap: 0.2rem; }
-
-  .login-divider {
-    margin: 0.55rem 0 0.4rem;
-    font-size: 0.65rem;
-  }
-
-  .login-provider-button {
-    min-height: 34px;
-    padding: 0.35rem 0.5rem;
-    font-size: 0.75rem;
-  }
 
   .login-register-link { margin-top: 0.15rem; }
 
@@ -967,7 +902,5 @@
   .register-page .register-form label { font-size: 0.75rem; }
   .register-page .register-form .login-submit { min-height: 40px; }
 
-  .login-provider-button { min-height: 2.5rem; padding: 0; }
-  .login-provider-icon { width: 1.8rem; height: 1.8rem; }
 }
 
