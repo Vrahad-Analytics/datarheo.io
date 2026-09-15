@@ -1,13 +1,12 @@
 import { createElement, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SiteNavbar from '../components/SiteNavbar.jsx';
+import { API_URL } from '../api.js';
 
 const Form = ({ children, ...props }) => <form {...props}>{children}</form>;
 Form.Label = ({ children, ...props }) => <label {...props}>{children}</label>;
 Form.Control = ({ className = '', ...props }) => createElement('input', { ...props, className: `form-control ${className}`.trim() });
 const Button = ({ children, ...props }) => <button {...props}>{children}</button>;
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
 export default function Register() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', confirmPassword: '' });
