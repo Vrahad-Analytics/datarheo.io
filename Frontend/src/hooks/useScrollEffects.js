@@ -18,6 +18,9 @@ export function useScrollEffects() {
       { threshold: 0.15 }
     );
     revealEls.forEach((el) => observer.observe(el));
+    if (window.location.hash) {
+      document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
+    }
 
     return () => {
       window.removeEventListener('scroll', handleScroll);

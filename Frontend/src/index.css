@@ -53,6 +53,35 @@ main > section {
   scroll-margin-top: 90px;
 }
 
+:where(a, button, input, textarea, select):focus-visible {
+  outline: 3px solid var(--blue-dark);
+  outline-offset: 4px;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+.skip-link {
+  position: absolute;
+  top: -120px;
+  left: 1rem;
+  z-index: 1100;
+  padding: 0.75rem 1rem;
+  background: var(--white);
+  color: var(--blue-dark);
+  border-radius: 8px;
+}
+
+.skip-link:focus { top: 0.5rem; }
+
+.route-state {
+  max-width: 640px;
+  margin: 15vh auto;
+  padding: 2rem;
+  text-align: center;
+}
+
 /* Respect users who don't want motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

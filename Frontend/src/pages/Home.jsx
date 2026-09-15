@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import SiteNavbar from '../components/SiteNavbar.jsx';
 import SiteFooter from '../components/SiteFooter.jsx';
 import DataFlowAnimation from '../components/DataFlowAnimation.jsx';
@@ -104,7 +105,7 @@ export default function Home() {
     <div className="home-wrapper">
       <SiteNavbar variant="home" />
 
-      <main>
+      <main id="main-content">
         {/* Background ambient lighting */}
         <div className="home-background" aria-hidden="true">
           <span className="home-background-orb home-background-orb--one" />
@@ -113,51 +114,65 @@ export default function Home() {
         </div>
 
         {/* ================= HERO SECTION ================= */}
-        <section id="home" className="hero enterprise-hero">
+        <section id="home" className="hero enterprise-hero product-hero">
+          <div className="product-hero-layout">
           <div className="hero-content">
             <div className="enterprise-badge-pill hero-badge">
               <span className="badge-pulse" />
-              <span>THE ENTERPRISE DATA MOVEMENT & CONNECTOR PLATFORM</span>
+              <span>YOUR DATA. CONNECTED.</span>
             </div>
 
             <h1 className="hero-headline">
-              Move data from <em>any source</em> to <em>any destination</em>. In real-time.
+              Less pipeline work.<br /><em>More possibility.</em>
             </h1>
 
             <p className="hero-subhead">
-              The automated ELT and Change Data Capture (CDC) platform built for modern data teams. Connect 350+ databases, SaaS apps, and APIs to your warehouse with sub-second latency, self-healing schema drift, and zero maintenance.
+              Bring your databases, apps, and warehouses together. Discover a simpler way to move data, keep it in sync, and put it to work.
             </p>
 
             <div className="hero-actions">
-              <a href="#simulator" className="cta hero-cta-primary">
-                Explore Live Studio <span>→</span>
-              </a>
-              <a href="#connectors" className="cta-outline hero-cta-secondary">
-                Browse 350+ Connectors
-              </a>
-              <a href="#contact" className="cta-talk">
-                Book Architecture Demo
+              <Link to="/register" className="cta hero-cta-primary">
+                Get started <span aria-hidden="true">→</span>
+              </Link>
+              <a href="#simulator" className="cta-outline hero-cta-secondary">
+                Try the interactive demo
               </a>
             </div>
 
             <div className="hero-trust-indicators">
               <div className="trust-indicator-item">
-                <span className="trust-indicator-icon">⚡</span>
-                <span>Sub-second CDC replication</span>
+                <span className="trust-indicator-icon" aria-hidden="true">✓</span>
+                <span>Explore connectors</span>
               </div>
               <div className="trust-indicator-item">
-                <span className="trust-indicator-icon">🛡️</span>
-                <span>Zero-break schema evolution</span>
+                <span className="trust-indicator-icon" aria-hidden="true">✓</span>
+                <span>Preview your pipeline</span>
               </div>
               <div className="trust-indicator-item">
-                <span className="trust-indicator-icon">🔒</span>
-                <span>SOC 2 Type II & HIPAA</span>
-              </div>
-              <div className="trust-indicator-item">
-                <span className="trust-indicator-icon">🌐</span>
-                <span>VPC Peering & Hybrid Agents</span>
+                <span className="trust-indicator-icon" aria-hidden="true">✓</span>
+                <span>Build with confidence</span>
               </div>
             </div>
+          </div>
+          <div className="hero-preview" aria-label="Illustrative pipeline preview with sample data">
+            <div className="hero-preview-header">
+              <span><span className="preview-window-dot" aria-hidden="true" /> Pipeline overview</span>
+              <span className="preview-demo-badge">DEMO</span>
+            </div>
+            <div className="hero-preview-body">
+              <div className="preview-title-row"><h2>From source to insight</h2><span className="preview-status">● In sync</span></div>
+              <div className="preview-pipeline">
+                <div className="preview-node"><ToolIcon tool="postgres" size={40} /><strong>PostgreSQL</strong><small>Source database</small></div>
+                <span className="preview-arrow" aria-hidden="true">→</span>
+                <div className="preview-node preview-node-hub"><img src="/images/logo.png" alt="" width="40" height="40" /><strong>Datarheo</strong><small>Connect & sync</small></div>
+                <span className="preview-arrow" aria-hidden="true">→</span>
+                <div className="preview-node"><ToolIcon tool="snowflake" size={40} /><strong>Snowflake</strong><small>Destination</small></div>
+              </div>
+              <div className="preview-stats"><div><small>Rows synced</small><strong>128,450</strong></div><div><small>Sync latency</small><strong>240 <span>ms</span></strong></div><div><small>Pipeline health</small><strong>Healthy</strong></div></div>
+              <div className="preview-activity"><span aria-hidden="true">✓</span><div><strong>Ready for your next big idea</strong><small>Sample data · Explore the demo to try it yourself</small></div></div>
+            </div>
+            <a href="#simulator" className="preview-footer-link">Open interactive pipeline studio <span aria-hidden="true">↗</span></a>
+          </div>
           </div>
         </section>
 

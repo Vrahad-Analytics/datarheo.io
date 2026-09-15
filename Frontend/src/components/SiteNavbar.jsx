@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from './Logo.jsx';
 
 export default function SiteNavbar({ variant = 'home' }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const menuButton = useRef(null);
   const closeMobileMenu = () => setMobileOpen(false);
 
   return (
-    <header className="navbar-brand-custom">
+    <header className="navbar-brand-custom" onKeyDown={(event) => {
+      if (event.key === 'Escape' && mobileOpen) {
+        closeMobileMenu();
+        menuButton.current?.focus();
+      }
+    }}>
+      <a className="skip-link" href="#main-content">Skip to content</a>
       {variant === 'home' && <>
       <div className="navbar-top-announcement">
         <div className="container-fluid announcement-inner">
           <span className="announcement-badge">NEW</span>
           <span className="announcement-text">
-            Datarheo Sub-Second CDC & Pinecone/Weaviate Vector Lakehouse Connectors are now Live!
+            Explore your next data connection in the interactive pipeline studio.
           </span>
           <a href="#connectors" className="announcement-link">
             Explore Connectors →
@@ -62,6 +69,7 @@ export default function SiteNavbar({ variant = 'home' }) {
                 Sign In <span>→</span>
               </Link>
               <button
+                ref={menuButton}
                 type="button"
                 className={`mobile-menu-toggle ${mobileOpen ? 'is-open' : ''}`}
                 aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
@@ -95,7 +103,7 @@ export default function SiteNavbar({ variant = 'home' }) {
           <>
             <nav className="nav-links">
               <Link to="/" className="back-link">
-                ← Return to Main Platform
+                ← Back to home
               </Link>
             </nav>
           </>
