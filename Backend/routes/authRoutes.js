@@ -1,16 +1,16 @@
 const express = require("express");
 
 const {
-    requestRegistrationOtp,
-    verifyOtp,
+    startRegistration,
+    verifyAuthenticator,
     setPassword,
     login
 } = require("../controllers/authController");
 
 const router = express.Router();
 
-router.post("/register/request-otp", requestRegistrationOtp);
-router.post("/register/verify-otp", verifyOtp);
+router.post("/register/start", startRegistration);
+router.post("/register/verify-authenticator", verifyAuthenticator);
 router.post("/register/set-password", setPassword);
 router.post("/login", login);
 
