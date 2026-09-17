@@ -4,20 +4,29 @@ const userSchema = new mongoose.Schema(
     {
         firstName: {
             type: String,
-            required: true,
+            required: false,
             trim: true
         },
 
         lastName: {
             type: String,
-            required: true,
+            required: false,
             trim: true
+        },
+
+        businessId: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true,
+            lowercase: true
         },
 
         email: {
             type: String,
-            required: true,
+            required: false,
             unique: true,
+            sparse: true,
             lowercase: true,
             trim: true
         },
@@ -43,6 +52,17 @@ const userSchema = new mongoose.Schema(
         },
 
         otpVerified: {
+            type: Boolean,
+            default: false
+        },
+
+        authenticatorSecret: {
+            type: String,
+            select: false,
+            default: null
+        },
+
+        authenticatorVerified: {
             type: Boolean,
             default: false
         }

@@ -142,6 +142,34 @@
 
 .register-page .register-form .login-submit { margin-top: 0.35rem; }
 
+.authenticator-enrollment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0.15rem 0 0.35rem;
+  text-align: center;
+}
+
+.authenticator-enrollment p {
+  color: var(--ink-secondary);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  margin: 0 0 0.15rem;
+}
+
+.authenticator-enrollment label,
+.authenticator-enrollment .form-control { align-self: stretch; text-align: left; }
+
+.authenticator-qr {
+  width: 148px;
+  height: 148px;
+  padding: 0.35rem;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
 /* Split-screen login (blue gradient, not black) */
 .split-login {
   display: flex;
