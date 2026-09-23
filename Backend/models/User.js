@@ -65,6 +65,40 @@ const userSchema = new mongoose.Schema(
         authenticatorVerified: {
             type: Boolean,
             default: false
+        },
+
+        failedLoginAttempts: {
+            type: Number,
+            default: 0
+        },
+
+        lockUntil: {
+            type: Date,
+            default: null
+        },
+
+        loginChallengeHash: {
+            type: String,
+            select: false,
+            default: null
+        },
+
+        loginChallengeExpiresAt: {
+            type: Date,
+            select: false,
+            default: null
+        },
+
+        refreshTokenHash: {
+            type: String,
+            select: false,
+            default: null
+        },
+
+        refreshTokenExpiresAt: {
+            type: Date,
+            select: false,
+            default: null
         }
     },
     {

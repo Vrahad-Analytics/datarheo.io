@@ -32,7 +32,7 @@ export default function Register() {
     try {
       const endpoint = step === 1 ? '/register/start' : step === 2 ? '/register/verify-authenticator' : '/register/set-password';
       const body = step === 1 ? { businessId: form.businessId } : step === 2 ? { businessId: form.businessId, otp } : form;
-      const response = await fetch(`${API_URL}/api/auth${endpoint}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      const response = await fetch(`${API_URL}/api/auth${endpoint}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify(body) });
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || 'Registration failed.');
       if (step === 1) {
@@ -43,7 +43,10 @@ export default function Register() {
       }
       else navigate('/login');
     } catch (requestError) {
-      setError(requestError.message);
+      const message = requestError instanceof TypeError
+        ? 'Unable to reach the server. Please check the connection or API configuration.'
+        : requestError.message;
+      setError(message);
     } finally {
       setSubmitting(false);
     }
@@ -67,7 +70,7 @@ export default function Register() {
               <Form.Label htmlFor="business-id">Business email</Form.Label>
               <Form.Control type="email" id="business-id" name="businessId" autoComplete="email" placeholder="you@company.com" required value={form.businessId} readOnly={step > 1} onChange={updateField} />
               {step === 2 && <div className="authenticator-enrollment"><p>Scan this QR code in Google Authenticator, Microsoft Authenticator, or another TOTP app.</p>{qrCode && <img src={qrCode} alt="Authenticator setup QR code" className="authenticator-qr" />}<Form.Label htmlFor="registration-otp">6-digit authenticator code</Form.Label><Form.Control type="text" id="registration-otp" inputMode="numeric" pattern="[0-9]{6}" maxLength="6" required value={otp} onChange={(event) => { setOtp(event.target.value.replace(/\D/g, '').slice(0, 6)); setError(''); }} /></div>}
-              {step === 3 && <><Form.Label htmlFor="register-password">Enter password</Form.Label><Form.Control type="password" id="register-password" name="password" autoComplete="new-password" required value={form.password} onChange={updateField} /><Form.Label htmlFor="confirm-password">Confirm password</Form.Label><Form.Control type="password" id="confirm-password" name="confirmPassword" autoComplete="new-password" required value={form.confirmPassword} onChange={updateField} /></>}
+              {step === 3 && <><Form.Label htmlFor="register-password">Enter password</Form.Label><Form.Control type="password" id="register-password" name="password" autoComplete="new-password" minLength={12} required value={form.password} onChange={updateField} /><Form.Label htmlFor="confirm-password">Confirm password</Form.Label><Form.Control type="password" id="confirm-password" name="confirmPassword" autoComplete="new-password" minLength={12} required value={form.confirmPassword} onChange={updateField} /></>}
               {error && <div className="login-error" role="alert">{error}</div>}
               <Button type="submit" className="cta login-submit login-submit--shine" disabled={submitting}>{submitting ? 'Please wait...' : step === 1 ? 'Set up authenticator' : step === 2 ? 'Verify authenticator' : 'Create account'}</Button>
             </Form>
