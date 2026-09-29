@@ -1,0 +1,5 @@
+:80 {
+	@backend path /api/* /health /health/* /metrics
+	reverse_proxy @backend backend:5000
+	reverse_proxy frontend:80
+}
