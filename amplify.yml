@@ -3,12 +3,10 @@ frontend:
   phases:
     preBuild:
       commands:
-        - cd Frontend
-        - npm ci
+        - cd Frontend && npm ci --no-audit --no-fund
     build:
       commands:
-        - if [ -z "$VITE_API_URL" ]; then export VITE_API_URL="https://api.datarheo.io"; fi
-        - npm run build
+        - cd Frontend && npm run build
   artifacts:
     baseDirectory: Frontend/dist
     files:
