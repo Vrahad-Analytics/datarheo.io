@@ -116,12 +116,7 @@ export default function PipelineSimulator() {
               </label>
               <div className="selector-pills">
                 {SIMULATOR_SOURCES.map((s) => (
-                  <button
-                    key={s.id}
-                    type="button"
-                    className={`selector-pill ${selectedSource.id === s.id ? 'is-active' : ''}`}
-                    onClick={() => setSelectedSource(s)}
-                  >
+                  <button key={s.id} type="button" className={`selector-pill ${selectedSource.id === s.id ? 'is-active' : ''}`} onClick={() => setSelectedSource(s)}>
                     <ToolIcon tool={s.tool} size={20} />
                     <span>{s.name}</span>
                   </button>
@@ -136,12 +131,7 @@ export default function PipelineSimulator() {
               </label>
               <div className="selector-pills">
                 {SIMULATOR_DESTINATIONS.map((d) => (
-                  <button
-                    key={d.id}
-                    type="button"
-                    className={`selector-pill ${selectedDest.id === d.id ? 'is-active' : ''}`}
-                    onClick={() => setSelectedDest(d)}
-                  >
+                  <button key={d.id} type="button" className={`selector-pill ${selectedDest.id === d.id ? 'is-active' : ''}`} onClick={() => setSelectedDest(d)}>
                     <ToolIcon tool={d.tool} size={20} />
                     <span>{d.name}</span>
                   </button>
@@ -155,18 +145,10 @@ export default function PipelineSimulator() {
                 <span className="label-dot dot-mode" /> 3. Sync Mode
               </label>
               <div className="mode-toggle-group">
-                <button
-                  type="button"
-                  className={`mode-btn ${syncMode === 'cdc' ? 'is-active' : ''}`}
-                  onClick={() => setSyncMode('cdc')}
-                >
+                <button type="button" className={`mode-btn ${syncMode === 'cdc' ? 'is-active' : ''}`} onClick={() => setSyncMode('cdc')}>
                   ⚡ Real-time CDC (Sub-second)
                 </button>
-                <button
-                  type="button"
-                  className={`mode-btn ${syncMode === 'batch' ? 'is-active' : ''}`}
-                  onClick={() => setSyncMode('batch')}
-                >
+                <button type="button" className={`mode-btn ${syncMode === 'batch' ? 'is-active' : ''}`} onClick={() => setSyncMode('batch')}>
                   ⏱️ 5-Min Micro-Batch
                 </button>
               </div>
@@ -185,18 +167,10 @@ export default function PipelineSimulator() {
                 <span className="stage-encryption-tag">🔒 End-to-End TLS 1.3 / KMS</span>
               </div>
               <div className="stage-status-actions">
-                <button
-                  type="button"
-                  className="stage-action-btn"
-                  onClick={() => setIsStreaming(!isStreaming)}
-                >
+                <button type="button" className="stage-action-btn" onClick={() => setIsStreaming(!isStreaming)}>
                   {isStreaming ? '⏸ Pause Pipeline' : '▶ Resume Pipeline'}
                 </button>
-                <button
-                  type="button"
-                  className="stage-action-btn stage-action-drift"
-                  onClick={triggerSchemaDrift}
-                >
+                <button type="button" className="stage-action-btn stage-action-drift" onClick={triggerSchemaDrift}>
                   ⚡ Simulate Upstream Schema Drift
                 </button>
               </div>
@@ -247,12 +221,7 @@ export default function PipelineSimulator() {
                   <strong>Schema Evolution Auto-Triggered:</strong>
                   <p>{driftNotification}</p>
                 </div>
-                <button
-                  type="button"
-                  className="drift-dismiss-btn"
-                  onClick={() => setDriftNotification('')}
-                  aria-label="Dismiss notification"
-                >
+                <button type="button" className="drift-dismiss-btn" onClick={() => setDriftNotification('')} aria-label="Dismiss notification">
                   ✕
                 </button>
               </div>

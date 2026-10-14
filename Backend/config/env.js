@@ -10,6 +10,7 @@ const envSchema = z.object({
     MONGO_URI: z.string().url().or(z.string().min(1)),
     JWT_SECRET: secretSchema,
     FRONTEND_URL: z.string().min(1),
+    RESET_PASSWORD_URL: z.string().url().optional(),
     COOKIE_DOMAIN: z.string().optional().default(""),
     REDIS_URL: z.string().optional().default(""),
     REDIS_REQUIRED: z.enum(["true", "false"]).default("false"),
@@ -25,6 +26,8 @@ if (!parsed.success) {
 
 const config = {
     ...parsed.data,
+    RESET_PASSWORD_URL: parsed.data.RESET_PASSWORD_URL
+        || (isProduction ? "https://datarheo.io/reset-password" : "http://localhost:5173/reset-password"),
     isProduction,
     allowedOrigins: parseList(parsed.data.FRONTEND_URL),
     redisRequired: parsed.data.REDIS_REQUIRED === "true",
@@ -37,6 +40,9 @@ if (!Number.isFinite(config.trustProxy) && config.trustProxy !== true) {
 if (isProduction) {
     if (config.allowedOrigins.some((origin) => !origin.startsWith("https://"))) {
         throw new Error("FRONTEND_URL must contain only HTTPS origins in production");
+    }
+    if (!config.RESET_PASSWORD_URL.startsWith("https://")) {
+        throw new Error("RESET_PASSWORD_URL must use HTTPS in production");
     }
     if (config.COOKIE_DOMAIN && !config.COOKIE_DOMAIN.startsWith(".")) {
         throw new Error("COOKIE_DOMAIN must begin with a dot in production");

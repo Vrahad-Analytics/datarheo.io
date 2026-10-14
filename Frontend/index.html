@@ -13,6 +13,18 @@
 </head>
 <body>
   <div id="root"></div>
+  <script>
+    (() => {
+      if (window.location.pathname.replace(/\/+$/, '') !== '/reset-password') return;
+      const token = new URLSearchParams(window.location.hash.slice(1)).get('token');
+      if (token && /^[a-f\d]{64}$/i.test(token)) {
+        window.__datarheoPasswordResetToken = token;
+      }
+      if (window.location.hash) {
+        window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+      }
+    })();
+  </script>
   <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>

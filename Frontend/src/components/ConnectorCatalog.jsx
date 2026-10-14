@@ -5,7 +5,7 @@ import { CONNECTOR_CATEGORIES, CONNECTORS_DATA } from '../data/connectorsData.js
 
 export default function ConnectorCatalog() {
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [typeFilter, setTypeFilter] = useState('all'); // all, source, destination
+  const [typeFilter, setTypeFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeModalConnector, setActiveModalConnector] = useState(null);
 
@@ -17,14 +17,13 @@ export default function ConnectorCatalog() {
         typeFilter === 'all' ||
         connector.type === 'both' ||
         connector.type === typeFilter;
-      const q = searchQuery.trim().toLowerCase();
+      const query = searchQuery.trim().toLowerCase();
       const matchesSearch =
-        !q ||
-        connector.name.toLowerCase().includes(q) ||
-        connector.description.toLowerCase().includes(q) ||
-        connector.badge.toLowerCase().includes(q) ||
-        connector.protocol.toLowerCase().includes(q);
-
+        !query ||
+        connector.name.toLowerCase().includes(query) ||
+        connector.description.toLowerCase().includes(query) ||
+        connector.badge.toLowerCase().includes(query) ||
+        connector.protocol.toLowerCase().includes(query);
       return matchesCategory && matchesType && matchesSearch;
     });
   }, [selectedCategory, typeFilter, searchQuery]);
@@ -49,35 +48,13 @@ export default function ConnectorCatalog() {
         <div className="catalog-controls">
           {/* Search */}
           <div className="catalog-search-wrap">
-            <svg
-              className="search-icon"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
+            <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8" />
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
-            <input
-              type="search"
-              className="catalog-search-input"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by name, protocol (e.g. Postgres, CDC, Salesforce, Snowflake)..."
-              aria-label="Search connectors"
-            />
+            <input type="search" className="catalog-search-input" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search by name, protocol (e.g. Postgres, CDC, Salesforce, Snowflake)..." aria-label="Search connectors" />
             {searchQuery && (
-              <button
-                type="button"
-                className="clear-search-btn"
-                onClick={() => setSearchQuery('')}
-                aria-label="Clear search"
-              >
+              <button type="button" className="clear-search-btn" onClick={() => setSearchQuery('')} aria-label="Clear search">
                 ✕
               </button>
             )}
@@ -85,31 +62,13 @@ export default function ConnectorCatalog() {
 
           {/* Type Filter */}
           <div className="catalog-type-pills" role="radiogroup" aria-label="Filter by connector type">
-            <button
-              type="button"
-              role="radio"
-              aria-checked={typeFilter === 'all'}
-              className={`type-pill ${typeFilter === 'all' ? 'is-active' : ''}`}
-              onClick={() => setTypeFilter('all')}
-            >
+            <button type="button" role="radio" aria-checked={typeFilter === 'all'} className={`type-pill ${typeFilter === 'all' ? 'is-active' : ''}`} onClick={() => setTypeFilter('all')}>
               All Types
             </button>
-            <button
-              type="button"
-              role="radio"
-              aria-checked={typeFilter === 'source'}
-              className={`type-pill ${typeFilter === 'source' ? 'is-active' : ''}`}
-              onClick={() => setTypeFilter('source')}
-            >
+            <button type="button" role="radio" aria-checked={typeFilter === 'source'} className={`type-pill ${typeFilter === 'source' ? 'is-active' : ''}`} onClick={() => setTypeFilter('source')}>
               Sources
             </button>
-            <button
-              type="button"
-              role="radio"
-              aria-checked={typeFilter === 'destination'}
-              className={`type-pill ${typeFilter === 'destination' ? 'is-active' : ''}`}
-              onClick={() => setTypeFilter('destination')}
-            >
+            <button type="button" role="radio" aria-checked={typeFilter === 'destination'} className={`type-pill ${typeFilter === 'destination' ? 'is-active' : ''}`} onClick={() => setTypeFilter('destination')}>
               Destinations
             </button>
           </div>
@@ -118,13 +77,7 @@ export default function ConnectorCatalog() {
         {/* Categories Bar */}
         <div className="catalog-categories-bar" role="tablist" aria-label="Connector categories">
           {CONNECTOR_CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              role="tab"
-              aria-selected={selectedCategory === cat.id}
-              className={`cat-tab ${selectedCategory === cat.id ? 'is-active' : ''}`}
-              onClick={() => setSelectedCategory(cat.id)}
-            >
+            <button key={cat.id} role="tab" aria-selected={selectedCategory === cat.id} className={`cat-tab ${selectedCategory === cat.id ? 'is-active' : ''}`} onClick={() => setSelectedCategory(cat.id)}>
               {cat.label}
             </button>
           ))}
@@ -133,7 +86,8 @@ export default function ConnectorCatalog() {
         {/* Results count & status */}
         <div className="catalog-status-bar">
           <span>
-            Showing <strong>{filteredConnectors.length}</strong> enterprise connectors
+            Showing <strong>{filteredConnectors.length}</strong> enterprise
+            connectors
           </span>
           <span className="live-verified-pill">
             <span className="dot-green" /> Production Verified SLA
@@ -143,19 +97,7 @@ export default function ConnectorCatalog() {
         {/* Connector Cards Grid */}
         <div className="connector-cards-grid">
           {filteredConnectors.map((connector) => (
-            <article
-              key={connector.id}
-              className="connector-card-v2"
-              onClick={() => setActiveModalConnector(connector)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  setActiveModalConnector(connector);
-                }
-              }}
-            >
+            <article key={connector.id} className="connector-card-v2" onClick={() => setActiveModalConnector(connector)} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveModalConnector(connector); } }}>
               <div className="connector-card-top">
                 <ToolIcon tool={connector.tool} size={48} className="connector-avatar" />
                 <div className="connector-pills">
@@ -195,7 +137,8 @@ export default function ConnectorCatalog() {
             </div>
             <h3>Custom API Connector</h3>
             <p>
-              Build, test, and publish custom internal connectors in 15 minutes using our open Connector Development Kit (CDK).
+              Build, test, and publish custom internal connectors in 15 minutes
+              using our open Connector Development Kit (CDK).
             </p>
             <a href="#contact" className="custom-connector-action">
               Request or Build Custom <span>→</span>
@@ -206,15 +149,7 @@ export default function ConnectorCatalog() {
         {filteredConnectors.length === 0 && (
           <div className="catalog-empty-state">
             <p>No connectors match &quot;{searchQuery}&quot; in this category.</p>
-            <button
-              type="button"
-              className="cta-outline btn-sm"
-              onClick={() => {
-                setSearchQuery('');
-                setSelectedCategory('all');
-                setTypeFilter('all');
-              }}
-            >
+            <button type="button" className="cta-outline btn-sm" onClick={() => { setSearchQuery(''); setSelectedCategory('all'); setTypeFilter('all'); }}>
               Reset Filters
             </button>
           </div>
@@ -226,7 +161,9 @@ export default function ConnectorCatalog() {
             <span className="cdk-kicker">CONNECTOR DEVELOPMENT KIT (CDK)</span>
             <h3>Have proprietary or legacy internal databases?</h3>
             <p>
-              Use the Datarheo CDK to generate certified connectors with built-in checkpointing, schema drift auto-repair, and rate limiting in pure Python or declarative YAML.
+              Use the Datarheo CDK to generate certified connectors with built-in
+              checkpointing, schema drift auto-repair, and rate limiting in pure
+              Python or declarative YAML.
             </p>
           </div>
           <div className="cdk-actions">
@@ -238,37 +175,28 @@ export default function ConnectorCatalog() {
       </div>
 
       {/* Modal for Connector Specs */}
-      {activeModalConnector && createPortal((
-        <div
-          className="connector-modal-backdrop"
-          onClick={() => setActiveModalConnector(null)}
-          role="presentation"
-        >
-          <div
-            className="connector-modal"
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modal-connector-title"
-          >
+      {activeModalConnector && createPortal(
+        <div className="connector-modal-backdrop" onClick={() => setActiveModalConnector(null)} role="presentation">
+          <div className="connector-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="modal-connector-title">
             <div className="connector-modal-header">
               <div className="modal-header-left">
                 <ToolIcon tool={activeModalConnector.tool} size={54} />
                 <div>
-                  <h3 id="modal-connector-title">{activeModalConnector.name} Connector</h3>
+                  <h3 id="modal-connector-title">
+                    {activeModalConnector.name} Connector
+                  </h3>
                   <div className="modal-badges">
-                    <span className="connector-badge-pill">{activeModalConnector.badge}</span>
-                    <span className="modal-category-tag">{activeModalConnector.category.toUpperCase()}</span>
+                    <span className="connector-badge-pill">
+                      {activeModalConnector.badge}
+                    </span>
+                    <span className="modal-category-tag">
+                      {activeModalConnector.category.toUpperCase()}
+                    </span>
                     <span className="modal-verified-tag">✔ 99.99% Enterprise SLA</span>
                   </div>
                 </div>
               </div>
-              <button
-                type="button"
-                className="modal-close-btn"
-                onClick={() => setActiveModalConnector(null)}
-                aria-label="Close dialog"
-              >
+              <button type="button" className="modal-close-btn" onClick={() => setActiveModalConnector(null)} aria-label="Close dialog">
                 ✕
               </button>
             </div>
@@ -285,7 +213,9 @@ export default function ConnectorCatalog() {
                 </div>
                 <div className="spec-box">
                   <span className="spec-label">Sync Latency</span>
-                  <strong className="text-success">{activeModalConnector.latency}</strong>
+                  <strong className="text-success">
+                    {activeModalConnector.latency}
+                  </strong>
                 </div>
                 <div className="spec-box">
                   <span className="spec-label">Schema Evolution</span>
@@ -297,8 +227,8 @@ export default function ConnectorCatalog() {
                     {activeModalConnector.type === 'both'
                       ? 'Bidirectional (Source & Destination)'
                       : activeModalConnector.type === 'source'
-                      ? 'Source Connector'
-                      : 'Destination Connector'}
+                    ? 'Source Connector'
+                    : 'Destination Connector'}
                   </strong>
                 </div>
               </div>
@@ -330,17 +260,14 @@ export default function ConnectorCatalog() {
               <a href="#contact" className="cta" onClick={() => setActiveModalConnector(null)}>
                 Deploy {activeModalConnector.name} Pipeline
               </a>
-              <button
-                type="button"
-                className="cta-outline"
-                onClick={() => setActiveModalConnector(null)}
-              >
+              <button type="button" className="cta-outline" onClick={() => setActiveModalConnector(null)}>
                 Close
               </button>
             </div>
           </div>
-        </div>
-      ), document.body)}
+        </div>,
+        document.body,
+      )}
     </section>
   );
 }

@@ -41,21 +41,6 @@ const userSchema = new mongoose.Schema(
             default: false
         },
 
-        otp: {
-            type: String,
-            default: null
-        },
-
-        otpExpires: {
-            type: Date,
-            default: null
-        },
-
-        otpVerified: {
-            type: Boolean,
-            default: false
-        },
-
         authenticatorSecret: {
             type: String,
             select: false,
@@ -84,6 +69,18 @@ const userSchema = new mongoose.Schema(
         },
 
         loginChallengeExpiresAt: {
+            type: Date,
+            select: false,
+            default: null
+        },
+
+        passwordResetTokenHash: {
+            type: String,
+            select: false,
+            default: null
+        },
+
+        passwordResetExpiresAt: {
             type: Date,
             select: false,
             default: null

@@ -14,8 +14,45 @@ export default function Login() {
   const [otp, setOtp] = useState('');
   const [loginChallenge, setLoginChallenge] = useState('');
   const [mfaRequired, setMfaRequired] = useState(false);
+  const [forgotPassword, setForgotPassword] = useState(false);
+  const [resetRequestSent, setResetRequestSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  function showLogin() {
+    setForgotPassword(false);
+    setResetRequestSent(false);
+    setError('');
+  }
+
+  async function handleForgotPassword(event) {
+    event.preventDefault();
+    const trimmedBusinessId = businessId.trim();
+    if (!trimmedBusinessId) return setError('Business email is required.');
+    if (!trimmedBusinessId.includes('@') || !trimmedBusinessId.includes('.')) {
+      return setError('Please enter a valid business email address.');
+    }
+
+    setSubmitting(true);
+    setError('');
+    try {
+      const response = await apiFetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ businessId: trimmedBusinessId })
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || 'Could not request a password reset.');
+      setResetRequestSent(true);
+    } catch (requestError) {
+      const message = requestError instanceof TypeError
+        ? 'Unable to reach the server. Please check the connection or API configuration.'
+        : requestError.message;
+      setError(message);
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -58,5 +95,59 @@ export default function Login() {
     }
   }
 
-  return <div className="login-page"><SiteNavbar variant="login" /><div className="split-login"><section className="split-login-panel login-story-panel" aria-labelledby="login-story-title"><p className="login-story-kicker">CONNECTED DATA, ALWAYS MOVING</p><h2 id="login-story-title"><span>Move data with confidence—</span>{' '}<span>datarheo.io keeps every source and warehouse in sync.</span></h2><p className="login-story-copy">One reliable flow for the systems your team already uses.</p></section><div className="split-login-form-wrap split-login-form-wrap--animated"><div className="login-card login-card--pop"><h1>Sign in</h1><p className="login-subtitle">{mfaRequired ? 'Enter the code from your authenticator app.' : 'Enter your business email and password to continue.'}</p><Form className="login-form" onSubmit={handleSubmit}><Form.Label htmlFor="business-id">Business email</Form.Label><Form.Control type="email" id="business-id" name="businessId" autoComplete="username" placeholder="you@company.com" required value={businessId} readOnly={mfaRequired} onChange={(event) => { setBusinessId(event.target.value); setError(''); }} className="login-input" /><Form.Label htmlFor="password">Password</Form.Label><Form.Control type="password" id="password" name="password" autoComplete="current-password" required value={password} readOnly={mfaRequired} onChange={(event) => { setPassword(event.target.value); setError(''); }} className="login-input" />{mfaRequired && <><Form.Label htmlFor="login-otp">Authenticator code</Form.Label><Form.Control type="text" id="login-otp" inputMode="numeric" pattern="[0-9]{6}" maxLength="6" autoComplete="one-time-code" required value={otp} onChange={(event) => { setOtp(event.target.value.replace(/\D/g, '').slice(0, 6)); setError(''); }} className="login-input" /></>}{error && <div className="login-error" role="alert">{error}</div>}<Button type="submit" className="cta login-submit login-submit--shine" disabled={submitting}>{submitting ? 'Signing in...' : mfaRequired ? 'Verify and sign in' : 'Continue'}</Button></Form><p className="login-help">New to datarheo.io? <Link to="/register">Create an account</Link></p></div></div></div><footer className="simple-footer"><p>&copy; 2026 datarheo.io. All rights reserved.</p></footer></div>;
+  return (
+    <div className="login-page">
+      <SiteNavbar variant="login" />
+      <div className="split-login">
+        <section className="split-login-panel login-story-panel" aria-labelledby="login-story-title">
+          <p className="login-story-kicker">CONNECTED DATA, ALWAYS MOVING</p>
+          <h2 id="login-story-title"><span>Move data with confidence—</span>{' '}<span>datarheo.io keeps every source and warehouse in sync.</span></h2>
+          <p className="login-story-copy">One reliable flow for the systems your team already uses.</p>
+        </section>
+        <div className="split-login-form-wrap split-login-form-wrap--animated">
+          <div className="login-card login-card--pop">
+            <h1>{forgotPassword ? 'Forgot password?' : 'Sign in'}</h1>
+            <p className="login-subtitle">
+              {forgotPassword
+                ? 'Enter your business email and we’ll send a password reset link if an account exists.'
+                : mfaRequired
+                  ? 'Enter the code from your authenticator app.'
+                  : 'Enter your business email and password to continue.'}
+            </p>
+            {resetRequestSent ? (
+              <>
+                <p className="login-success" role="status">If an account exists for that email, a password reset link has been sent.</p>
+                <p className="login-help"><button type="button" className="login-text-button" onClick={showLogin}>Return to sign in</button></p>
+              </>
+            ) : (
+              <Form className="login-form" onSubmit={forgotPassword ? handleForgotPassword : handleSubmit}>
+                <Form.Label htmlFor="business-id">Business email</Form.Label>
+                <Form.Control type="email" id="business-id" name="businessId" autoComplete="username" placeholder="you@company.com" required value={businessId} readOnly={mfaRequired} onChange={(event) => { setBusinessId(event.target.value); setError(''); }} className="login-input" />
+                {!forgotPassword && <>
+                  <Form.Label htmlFor="password">Password</Form.Label>
+                  <Form.Control type="password" id="password" name="password" autoComplete="current-password" required value={password} readOnly={mfaRequired} onChange={(event) => { setPassword(event.target.value); setError(''); }} className="login-input" />
+                  {mfaRequired && <>
+                    <Form.Label htmlFor="login-otp">Authenticator code</Form.Label>
+                    <Form.Control type="text" id="login-otp" inputMode="numeric" pattern="[0-9]{6}" maxLength="6" autoComplete="one-time-code" required value={otp} onChange={(event) => { setOtp(event.target.value.replace(/\D/g, '').slice(0, 6)); setError(''); }} className="login-input" />
+                  </>}
+                </>}
+                {error && <div className="login-error" role="alert">{error}</div>}
+                <Button type="submit" className="cta login-submit login-submit--shine" disabled={submitting}>
+                  {submitting ? 'Please wait...' : forgotPassword ? 'Send reset link' : mfaRequired ? 'Verify and sign in' : 'Continue'}
+                </Button>
+              </Form>
+            )}
+            {!mfaRequired && !resetRequestSent && (
+              <p className="login-help">
+                {forgotPassword
+                  ? <>Remember your password? <button type="button" className="login-text-button" onClick={showLogin}>Sign in</button></>
+                  : <><button type="button" className="login-text-button" onClick={() => { setForgotPassword(true); setError(''); }}>Forgot password?</button><br />New to datarheo.io? <Link to="/register">Create an account</Link></>}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+      <footer className="simple-footer"><p>&copy; 2026 datarheo.io. All rights reserved.</p></footer>
+    </div>
+  );
 }

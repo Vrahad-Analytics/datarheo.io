@@ -327,10 +327,7 @@ export default function Home() {
 
             <div className="pricing-cards-grid">
               {PRICING_TIERS_ENTERPRISE.map((tier) => (
-                <div
-                  key={tier.title}
-                  className={`pricing-card-v2 ${tier.featured ? 'is-featured' : ''}`}
-                >
+                <div key={tier.title} className={`pricing-card-v2 ${tier.featured ? 'is-featured' : ''}`}>
                   {tier.featured && (
                     <div className="featured-banner">MOST POPULAR WITH DATA TEAMS</div>
                   )}
@@ -342,10 +339,7 @@ export default function Home() {
                     <span className="tier-price-period">{tier.period}</span>
                   </div>
 
-                  <a
-                    href="#contact"
-                    className={`cta tier-cta ${tier.featured ? 'tier-cta-featured' : 'tier-cta-standard'}`}
-                  >
+                  <a href="#contact" className={`cta tier-cta ${tier.featured ? 'tier-cta-featured' : 'tier-cta-standard'}`}>
                     {tier.ctaText} <span>→</span>
                   </a>
 
@@ -401,16 +395,8 @@ export default function Home() {
 
             <div className="faq-accordion-wrap">
               {ENTERPRISE_FAQS.map((faq, index) => (
-                <div
-                  key={faq.question}
-                  className={`faq-item-v2 ${openFaq === index ? 'is-expanded' : ''}`}
-                >
-                  <button
-                    type="button"
-                    className="faq-toggle-btn"
-                    onClick={() => setOpenFaq(openFaq === index ? -1 : index)}
-                    aria-expanded={openFaq === index}
-                  >
+                <div key={faq.question} className={`faq-item-v2 ${openFaq === index ? 'is-expanded' : ''}`}>
+                  <button type="button" className="faq-toggle-btn" onClick={() => setOpenFaq(openFaq === index ? -1 : index)} aria-expanded={openFaq === index}>
                     <span className="faq-q-text">{faq.question}</span>
                     <span className="faq-q-indicator">{openFaq === index ? '−' : '+'}</span>
                   </button>
@@ -469,69 +455,32 @@ export default function Home() {
                   <h3>Schedule Architecture Review</h3>
                   <p className="form-sub">Tell us what systems you want to sync:</p>
 
-                  <form
-                    className="enterprise-contact-form"
-                    action="mailto:hello@datarheo.io"
-                    method="post"
-                  >
+                  <form className="enterprise-contact-form" action="mailto:hello@datarheo.io" method="post">
                     <div className="form-row-2">
                       <div className="form-group">
                         <label htmlFor="user-name">Your Full Name *</label>
-                        <input
-                          id="user-name"
-                          className="form-control"
-                          type="text"
-                          name="name"
-                          placeholder="e.g. Alex Chen"
-                          required
-                        />
+                        <input id="user-name" className="form-control" type="text" name="name" placeholder="e.g. Alex Chen" required />
                       </div>
                       <div className="form-group">
                         <label htmlFor="user-email">Work Email *</label>
-                        <input
-                          id="user-email"
-                          className="form-control"
-                          type="email"
-                          name="email"
-                          placeholder="alex@company.com"
-                          required
-                        />
+                        <input id="user-email" className="form-control" type="email" name="email" placeholder="alex@company.com" required />
                       </div>
                     </div>
 
                     <div className="form-row-2">
                       <div className="form-group">
                         <label htmlFor="user-source">Primary Data Source</label>
-                        <input
-                          id="user-source"
-                          className="form-control"
-                          type="text"
-                          name="source"
-                          placeholder="e.g. PostgreSQL, Salesforce, MySQL"
-                        />
+                        <input id="user-source" className="form-control" type="text" name="source" placeholder="e.g. PostgreSQL, Salesforce, MySQL" />
                       </div>
                       <div className="form-group">
                         <label htmlFor="user-dest">Destination Warehouse</label>
-                        <input
-                          id="user-dest"
-                          className="form-control"
-                          type="text"
-                          name="destination"
-                          placeholder="e.g. Snowflake, BigQuery, Databricks"
-                        />
+                        <input id="user-dest" className="form-control" type="text" name="destination" placeholder="e.g. Snowflake, BigQuery, Databricks" />
                       </div>
                     </div>
 
                     <div className="form-group">
                       <label htmlFor="user-message">Pipeline Scale & Requirements</label>
-                      <textarea
-                        id="user-message"
-                        className="form-control"
-                        name="message"
-                        placeholder="Share your estimated row volume, sync frequency needs, or custom API requirements..."
-                        rows={4}
-                        required
-                      />
+                      <textarea id="user-message" className="form-control" name="message" placeholder="Share your estimated row volume, sync frequency needs, or custom API requirements..." rows={4} required />
                     </div>
 
                     <button type="submit" className="cta contact-submit-btn">

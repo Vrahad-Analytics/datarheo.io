@@ -61,25 +61,14 @@ export default function SiteNavbar({ variant = 'home' }) {
               <Link to="/login" className="login-btn">
                 Sign In <span>→</span>
               </Link>
-              <button
-                type="button"
-                className={`mobile-menu-toggle ${mobileOpen ? 'is-open' : ''}`}
-                aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
-                aria-expanded={mobileOpen}
-                aria-controls="mobile-navigation"
-                onClick={() => setMobileOpen((isOpen) => !isOpen)}
-              >
+              <button type="button" className={`mobile-menu-toggle ${mobileOpen ? 'is-open' : ''}`} aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'} aria-expanded={mobileOpen} aria-controls="mobile-navigation" onClick={() => setMobileOpen((isOpen) => !isOpen)}>
                 <span />
                 <span />
                 <span />
               </button>
             </div>
 
-            <nav
-              id="mobile-navigation"
-              className={`mobile-nav ${mobileOpen ? 'is-open' : ''}`}
-              aria-label="Mobile navigation"
-            >
+            <nav id="mobile-navigation" className={`mobile-nav ${mobileOpen ? 'is-open' : ''}`} aria-label="Mobile navigation">
               <a href="#connectors" onClick={closeMobileMenu}>Connectors (350+)</a>
               <a href="#simulator" onClick={closeMobileMenu}>Live Studio</a>
               <a href="#capabilities" onClick={closeMobileMenu}>Capabilities</a>
