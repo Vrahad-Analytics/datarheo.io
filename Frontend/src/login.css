@@ -70,6 +70,23 @@
   text-decoration: none;
 }
 
+.login-text-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.login-success {
+  color: var(--success);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
 .login-register-link { margin-top: 0.25rem; }
 
 .register-name-fields {
@@ -931,4 +948,3 @@
   .register-page .register-form .login-submit { min-height: 40px; }
 
 }
-

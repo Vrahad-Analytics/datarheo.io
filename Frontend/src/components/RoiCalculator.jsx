@@ -42,16 +42,7 @@ export default function RoiCalculator() {
                   {rowsMillions >= 100 ? `${rowsMillions}M+ rows` : `${rowsMillions} Million rows`}
                 </span>
               </div>
-              <input
-                id="mar-slider"
-                type="range"
-                min="1"
-                max="200"
-                step="1"
-                value={rowsMillions}
-                onChange={(e) => setRowsMillions(Number(e.target.value))}
-                className="calc-range-slider"
-              />
+              <input id="mar-slider" type="range" min="1" max="200" step="1" value={rowsMillions} onChange={(e) => setRowsMillions(Number(e.target.value))} className="calc-range-slider" />
               <div className="calc-slider-markers">
                 <span>1M</span>
                 <span>50M</span>
@@ -68,16 +59,7 @@ export default function RoiCalculator() {
                 </label>
                 <span className="calc-value-display">{connectorsCount} connectors</span>
               </div>
-              <input
-                id="connectors-slider"
-                type="range"
-                min="2"
-                max="40"
-                step="1"
-                value={connectorsCount}
-                onChange={(e) => setConnectorsCount(Number(e.target.value))}
-                className="calc-range-slider"
-              />
+              <input id="connectors-slider" type="range" min="2" max="40" step="1" value={connectorsCount} onChange={(e) => setConnectorsCount(Number(e.target.value))} className="calc-range-slider" />
               <div className="calc-slider-markers">
                 <span>2</span>
                 <span>10</span>

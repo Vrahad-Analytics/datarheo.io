@@ -1,0 +1,80 @@
+const User = require("../entities/User");
+const UserRepository = require("./UserRepository");
+
+class UserRepositoryImpl extends UserRepository {
+    findByBusinessId(businessId, select = "") {
+        return User.findOne({ businessId }).select(select);
+    }
+
+    findByBusinessIdOrEmail(businessId) {
+        return User.findOne({ $or: [{ businessId }, { email: businessId }] });
+    }
+
+    findById(userId) {
+        return User.findById(userId);
+    }
+
+    findLoginChallenge(challengeHash, now) {
+        return User.findOne(
+            {
+                loginChallengeHash: challengeHash, loginChallengeExpiresAt: { $gt: now }
+            }).select("+authenticatorSecret +loginChallengeHash +loginChallengeExpiresAt");
+    }
+
+    consumeLoginChallenge(userId, challengeHash, now) {
+        return User.findOneAndUpdate(
+            { _id: userId, loginChallengeHash: challengeHash, loginChallengeExpiresAt: { $gt: now } },
+            { $unset: { loginChallengeHash: 1, loginChallengeExpiresAt: 1 } },
+            { returnDocument: "after" }
+        );
+    }
+
+    findRefreshToken(refreshTokenHash, now) {
+        return User.findOne({ refreshTokenHash, refreshTokenExpiresAt: { $gt: now } }).select("+refreshTokenHash +refreshTokenExpiresAt");
+    }
+
+    findPasswordResetToken(passwordResetTokenHash, now) {
+        return User.findOne({
+            passwordResetTokenHash,
+            passwordResetExpiresAt: { $gt: now },
+            isVerified: true
+        }).select("+passwordResetTokenHash +passwordResetExpiresAt");
+    }
+
+    consumePasswordResetToken(userId, passwordResetTokenHash, now, password) {
+        return User.findOneAndUpdate(
+            {
+                _id: userId,
+                passwordResetTokenHash,
+                passwordResetExpiresAt: { $gt: now },
+                isVerified: true
+            },
+            {
+                $set: { password },
+                $unset: {
+                    passwordResetTokenHash: 1,
+                    passwordResetExpiresAt: 1,
+                    refreshTokenHash: 1,
+                    refreshTokenExpiresAt: 1,
+                    loginChallengeHash: 1,
+                    loginChallengeExpiresAt: 1
+                }
+            },
+            { returnDocument: "after" }
+        );
+    }
+
+    save(user) {
+        return user.save();
+    }
+
+    updateRefreshToken(userId, refreshTokenHash, refreshTokenExpiresAt) {
+        return User.updateOne({ _id: userId }, { refreshTokenHash, refreshTokenExpiresAt });
+    }
+
+    revokeRefreshToken(refreshTokenHash) {
+        return User.updateOne({ refreshTokenHash }, { $unset: { refreshTokenHash: 1, refreshTokenExpiresAt: 1 } });
+    }
+}
+
+module.exports = UserRepositoryImpl;

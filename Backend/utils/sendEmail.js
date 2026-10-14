@@ -8,28 +8,35 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const sendOTPEmail = async (email, otp) => {
-    const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: "Datarheo Email Verification OTP",
+const sendPasswordResetEmail = async (email, resetUrl) => {
+    const emailUser = process.env.EMAIL_USER;
+    const emailPassword = process.env.EMAIL_PASSWORD;
+    if (!emailUser || !emailPassword || emailUser.startsWith("replace-with") || emailPassword.startsWith("replace-with")) {
+        const error = new Error("Password reset email requires EMAIL_USER and EMAIL_PASSWORD");
+        error.code = "EMAIL_CONFIGURATION_MISSING";
+        throw error;
+    }
 
-        html: `
-            <div style="font-family: Arial, sans-serif;">
-                <h2>Datarheo Email Verification</h2>
-
-                <p>Your OTP for account verification is:</p>
-
-                <h1>${otp}</h1>
-
-                <p>This OTP will expire in 10 minutes.</p>
-
-                <p>If you did not create this account, please ignore this email.</p>
-            </div>
-        `
-    };
-
-    await transporter.sendMail(mailOptions);
+    try {
+        await transporter.sendMail({
+            from: emailUser,
+            to: email,
+            subject: "Reset your Datarheo password",
+            text: `Use this link to reset your Datarheo password. It expires in 30 minutes: ${resetUrl}`,
+            html: `
+                <div style="font-family: Arial, sans-serif;">
+                    <h2>Reset your Datarheo password</h2>
+                    <p>Use the link below to choose a new password. This link expires in 30 minutes and can only be used once.</p>
+                    <p><a href="${resetUrl}">Reset password</a></p>
+                    <p>If you did not request a password reset, you can ignore this email.</p>
+                </div>
+            `
+        });
+    } catch (cause) {
+        const error = new Error("Password reset email delivery failed", { cause });
+        error.code = "EMAIL_DELIVERY_FAILED";
+        throw error;
+    }
 };
 
-module.exports = sendOTPEmail;
+module.exports = { sendPasswordResetEmail };

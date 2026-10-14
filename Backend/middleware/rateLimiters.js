@@ -17,18 +17,11 @@ const connectRedis = async () => {
 };
 
 const createLimiter = (limit, message) => rateLimit({
-    windowMs: 15 * 60 * 1000,
-    limit,
-    standardHeaders: "draft-8",
-    legacyHeaders: false,
-    store,
-    message: { message }
+    windowMs: 15 * 60 * 1000,limit,standardHeaders: "draft-8",legacyHeaders: false,store,message: { message }
 });
 
 module.exports = {
     loginLimiter: createLimiter(10, "Too many login attempts. Please try again later."),
     registrationLimiter: createLimiter(20, "Too many registration attempts. Please try again later."),
-    getRedisStatus: () => ({ configured: Boolean(redis), status: redis?.status || "disabled" }),
-    connectRedis,
-    closeRedis: async () => redis?.quit()
+    getRedisStatus: () => ({ configured: Boolean(redis), status: redis?.status || "disabled" }),connectRedis,closeRedis: async () => redis?.quit()
 };

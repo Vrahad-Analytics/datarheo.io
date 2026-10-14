@@ -34,7 +34,11 @@ const cookieHeader = (response, existing = "") => {
 
 test("registration, MFA login, refresh, and logout lifecycle", { skip: !email || !password }, async () => {
     const registrationEmail = `${Date.now()}-${email}`;
-    const started = await post("/api/auth/register/start", { businessId: registrationEmail });
+    const started = await post("/api/auth/register/start", {
+        businessId: registrationEmail,
+        firstName: "Ada",
+        lastName: "Lovelace"
+    });
     assert.equal(started.response.status, 200, JSON.stringify(started.body));
     const secret = new URL(started.body.otpauthUri).searchParams.get("secret");
     assert.ok(secret);
@@ -54,9 +58,16 @@ test("registration, MFA login, refresh, and logout lifecycle", { skip: !email ||
     assert.equal(invalidMfa.response.status, 401);
     const authenticated = await post("/api/auth/login/verify-mfa", { loginChallenge: challenge, otp: generateSync({ secret }) });
     assert.equal(authenticated.response.status, 200, JSON.stringify(authenticated.body));
+    assert.equal(authenticated.body.user.firstName, "Ada");
+    assert.equal(authenticated.body.user.lastName, "Lovelace");
+    assert.equal(authenticated.body.user.displayName, "Ada Lovelace");
     let cookies = cookieHeader(authenticated.response);
     assert.match(cookies, /accessToken=/);
     assert.match(cookies, /refreshToken=/);
+
+    const currentUser = await request("/api/auth/me", { headers: { Cookie: cookies } });
+    assert.equal(currentUser.response.status, 200, JSON.stringify(currentUser.body));
+    assert.equal(currentUser.body.user.displayName, "Ada Lovelace");
 
     const refreshed = await request("/api/auth/refresh", { method: "POST", headers: { Cookie: cookies } });
     assert.equal(refreshed.response.status, 200);

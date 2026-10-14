@@ -9,7 +9,7 @@ Form.Control = ({ className = '', ...props }) => createElement('input', { ...pro
 const Button = ({ children, ...props }) => <button {...props}>{children}</button>;
 export default function Register() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ businessId: '', password: '', confirmPassword: '' });
+  const [form, setForm] = useState({ firstName: '', lastName: '', businessId: '', password: '', confirmPassword: '' });
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState(1);
   const [qrCode, setQrCode] = useState('');
@@ -24,14 +24,24 @@ export default function Register() {
   async function handleSubmit(event) {
     event.preventDefault();
     setError('');
-    if (step === 1 && (!form.businessId.includes('@') || !form.businessId.includes('.'))) {
-      setError('Please enter a valid business email address.');
-      return;
+    if (step === 1) {
+      if (!form.firstName.trim() || !form.lastName.trim()) {
+        setError('First name and last name are required.');
+        return;
+      }
+      if (!form.businessId.includes('@') || !form.businessId.includes('.')) {
+        setError('Please enter a valid business email address.');
+        return;
+      }
     }
     setSubmitting(true);
     try {
       const endpoint = step === 1 ? '/register/start' : step === 2 ? '/register/verify-authenticator' : '/register/set-password';
-      const body = step === 1 ? { businessId: form.businessId } : step === 2 ? { businessId: form.businessId, otp } : form;
+      const body = step === 1
+        ? { businessId: form.businessId, firstName: form.firstName.trim(), lastName: form.lastName.trim() }
+        : step === 2
+          ? { businessId: form.businessId, otp }
+          : form;
       const response = await fetch(`${API_URL}/api/auth${endpoint}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify(body) });
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || 'Registration failed.');
@@ -67,6 +77,10 @@ export default function Register() {
             <img src="/images/logo.png" alt="datarheo.io" className="login-logo login-logo--float" />
             <h1>Create account</h1><p className="login-subtitle">Set up secure access with your business email.</p>
             <Form className="login-form register-form" onSubmit={handleSubmit}>
+              {step === 1 && <div className="register-name-fields">
+                <div><Form.Label htmlFor="first-name">First name</Form.Label><Form.Control type="text" id="first-name" name="firstName" autoComplete="given-name" maxLength={80} required value={form.firstName} onChange={updateField} /></div>
+                <div><Form.Label htmlFor="last-name">Last name</Form.Label><Form.Control type="text" id="last-name" name="lastName" autoComplete="family-name" maxLength={80} required value={form.lastName} onChange={updateField} /></div>
+              </div>}
               <Form.Label htmlFor="business-id">Business email</Form.Label>
               <Form.Control type="email" id="business-id" name="businessId" autoComplete="email" placeholder="you@company.com" required value={form.businessId} readOnly={step > 1} onChange={updateField} />
               {step === 2 && <div className="authenticator-enrollment"><p>Scan this QR code in Google Authenticator, Microsoft Authenticator, or another TOTP app.</p>{qrCode && <img src={qrCode} alt="Authenticator setup QR code" className="authenticator-qr" />}<Form.Label htmlFor="registration-otp">6-digit authenticator code</Form.Label><Form.Control type="text" id="registration-otp" inputMode="numeric" pattern="[0-9]{6}" maxLength="6" required value={otp} onChange={(event) => { setOtp(event.target.value.replace(/\D/g, '').slice(0, 6)); setError(''); }} /></div>}

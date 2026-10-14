@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home.jsx';
 const Login = lazy(() => import('./pages/Login.jsx'));
 const Register = lazy(() => import('./pages/Register.jsx'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword.jsx'));
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Suspense fallback={<main aria-busy="true" />}><Login /></Suspense>} />
       <Route path="/register" element={<Suspense fallback={<main aria-busy="true" />}><Register /></Suspense>} />
+      <Route path="/reset-password" element={<Suspense fallback={<main aria-busy="true" />}><ResetPassword /></Suspense>} />
     </Routes>
   );
 }

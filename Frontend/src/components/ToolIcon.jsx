@@ -3,83 +3,67 @@ import React from 'react';
 export const TOOL_ICONS = {
   aws: {
     color: '#232F3E',
-    icon: (
-      <>
-        <text x="12" y="13.5" textAnchor="middle" fill="#fff" fontSize="7" fontWeight="700" fontFamily="Arial, sans-serif">aws</text>
-        <path d="M6 16.5 Q12 20 18 16.5" fill="none" stroke="#FF9900" strokeWidth="1.6" strokeLinecap="round" />
-        <path d="M16 15.8 l2.2 .7 -1.4 1.8" fill="#FF9900" />
-      </>
+    icon: (<>
+      <text x="12" y="13.5" textAnchor="middle" fill="#fff" fontSize="7" fontWeight="700" fontFamily="Arial, sans-serif">aws</text>
+      <path d="M6 16.5 Q12 20 18 16.5" fill="none" stroke="#FF9900" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M16 15.8 l2.2 .7 -1.4 1.8" fill="#FF9900" /> </>
     ),
   },
   s3: {
     color: '#E05326',
-    icon: (
-      <>
-        <path d="M4 6 L20 6 L18 19 Q18 20 17 20 L7 20 Q6 20 6 19 Z" fill="none" stroke="#fff" strokeWidth="1.6" strokeLinejoin="round" />
-        <path d="M4 6 Q12 8.4 20 6" fill="none" stroke="#fff" strokeWidth="1.6" />
-        <line x1="8" y1="9.2" x2="8.6" y2="17" stroke="#fff" strokeWidth="1.1" />
-        <line x1="16" y1="9.2" x2="15.4" y2="17" stroke="#fff" strokeWidth="1.1" />
-        <line x1="12" y1="9.4" x2="12" y2="17.2" stroke="#fff" strokeWidth="1.1" />
-      </>
+    icon: (<>
+      <path d="M4 6 L20 6 L18 19 Q18 20 17 20 L7 20 Q6 20 6 19 Z" fill="none" stroke="#fff" strokeWidth="1.6" strokeLinejoin="round" />
+      <path d="M4 6 Q12 8.4 20 6" fill="none" stroke="#fff" strokeWidth="1.6" />
+      <line x1="8" y1="9.2" x2="8.6" y2="17" stroke="#fff" strokeWidth="1.1" />
+      <line x1="16" y1="9.2" x2="15.4" y2="17" stroke="#fff" strokeWidth="1.1" />
+      <line x1="12" y1="9.4" x2="12" y2="17.2" stroke="#fff" strokeWidth="1.1" /></>
     ),
   },
   postgres: {
     color: '#336791',
-    icon: (
-      <>
-        <ellipse cx="12" cy="6" rx="7" ry="2.4" fill="#fff" />
-        <path d="M5 6 v10.2 c0 1.4 3.1 2.6 7 2.6 s7 -1.2 7 -2.6 V6" fill="none" stroke="#fff" strokeWidth="1.5" />
-        <path d="M5 10.8c0 1.4 3.1 2.6 7 2.6s7 -1.2 7 -2.6" fill="none" stroke="#fff" strokeWidth="1.2" />
-      </>
+    icon: (<>
+      <ellipse cx="12" cy="6" rx="7" ry="2.4" fill="#fff" />
+      <path d="M5 6 v10.2 c0 1.4 3.1 2.6 7 2.6 s7 -1.2 7 -2.6 V6" fill="none" stroke="#fff" strokeWidth="1.5" />
+      <path d="M5 10.8c0 1.4 3.1 2.6 7 2.6s7 -1.2 7 -2.6" fill="none" stroke="#fff" strokeWidth="1.2" />   </>
     ),
   },
   mysql: {
     color: '#00758F',
-    icon: (
-      <>
-        <path d="M5 15.5c2.8-4.8 5.8-7.5 10.6-7.4 1.5 0 2.7.7 3.4 1.9-2.1-.5-4 .1-5.5 1.8 1.7-.2 3.2.1 4.5.8-2.4.2-4.3 1.1-5.6 2.8-1.4 1.8-3.7 2.1-7.4 0Z" fill="#fff" />
-        <circle cx="15.9" cy="9.8" r=".75" fill="#00758F" />
-        <path d="M5.5 16.8c2.6 2.2 6.1 2.6 9.8 1" fill="none" stroke="#F29111" strokeWidth="1.3" strokeLinecap="round" />
-      </>
+    icon: (<>
+      <path d="M5 15.5c2.8-4.8 5.8-7.5 10.6-7.4 1.5 0 2.7.7 3.4 1.9-2.1-.5-4 .1-5.5 1.8 1.7-.2 3.2.1 4.5.8-2.4.2-4.3 1.1-5.6 2.8-1.4 1.8-3.7 2.1-7.4 0Z" fill="#fff" />
+      <circle cx="15.9" cy="9.8" r=".75" fill="#00758F" />
+      <path d="M5.5 16.8c2.6 2.2 6.1 2.6 9.8 1" fill="none" stroke="#F29111" strokeWidth="1.3" strokeLinecap="round" /></>
     ),
   },
   mongodb: {
     color: '#13AA52',
-    icon: (
-      <>
-        <path d="M12 3.2c-3.3 3.7-4.2 6.5-3.4 10 .5 2.3 1.8 4.2 3.4 5.5 1.7-1.3 2.9-3.2 3.4-5.5.8-3.5-.1-6.3-3.4-10Z" fill="#fff" />
-        <path d="M12 5.2v13.2" stroke="#13AA52" strokeWidth="1.05" strokeLinecap="round" />
-      </>
+    icon: (<>
+      <path d="M12 3.2c-3.3 3.7-4.2 6.5-3.4 10 .5 2.3 1.8 4.2 3.4 5.5 1.7-1.3 2.9-3.2 3.4-5.5.8-3.5-.1-6.3-3.4-10Z" fill="#fff" />
+      <path d="M12 5.2v13.2" stroke="#13AA52" strokeWidth="1.05" strokeLinecap="round" /></>
     ),
   },
   oracle: {
     color: '#C74634',
-    icon: (
-      <>
-        <ellipse cx="12" cy="12" rx="7.5" ry="4.5" fill="none" stroke="#fff" strokeWidth="1.8" />
-        <path d="M7 10h10v4H7z" fill="none" stroke="#fff" strokeWidth="0.8" opacity="0.3" />
-      </>
+    icon: (<>
+      <ellipse cx="12" cy="12" rx="7.5" ry="4.5" fill="none" stroke="#fff" strokeWidth="1.8" />
+      <path d="M7 10h10v4H7z" fill="none" stroke="#fff" strokeWidth="0.8" opacity="0.3" /></>
     ),
   },
   sqlserver: {
     color: '#0078D4',
-    icon: (
-      <>
-        <rect x="5" y="4" width="6" height="6" fill="#fff" rx="0.5" />
-        <rect x="13" y="4" width="6" height="6" fill="#fff" rx="0.5" />
-        <rect x="5" y="12" width="6" height="6" fill="#fff" rx="0.5" />
-        <rect x="13" y="12" width="6" height="6" fill="#fff" rx="0.5" />
-      </>
+    icon: (<>
+      <rect x="5" y="4" width="6" height="6" fill="#fff" rx="0.5" />
+      <rect x="13" y="4" width="6" height="6" fill="#fff" rx="0.5" />
+      <rect x="5" y="12" width="6" height="6" fill="#fff" rx="0.5" />
+      <rect x="13" y="12" width="6" height="6" fill="#fff" rx="0.5" /></>
     ),
   },
   dynamodb: {
     color: '#4B5EAA',
-    icon: (
-      <>
-        <ellipse cx="12" cy="6" rx="6.5" ry="2.2" fill="#fff" />
-        <path d="M5.5 6v4c0 1.2 2.9 2.2 6.5 2.2s6.5-1 6.5-2.2V6" fill="none" stroke="#fff" strokeWidth="1.2" />
-        <path d="M5.5 10v4c0 1.2 2.9 2.2 6.5 2.2s6.5-1 6.5-2.2V10" fill="none" stroke="#fff" strokeWidth="1.2" />
-      </>
+    icon: (<>
+      <ellipse cx="12" cy="6" rx="6.5" ry="2.2" fill="#fff" />
+      <path d="M5.5 6v4c0 1.2 2.9 2.2 6.5 2.2s6.5-1 6.5-2.2V6" fill="none" stroke="#fff" strokeWidth="1.2" />
+      <path d="M5.5 10v4c0 1.2 2.9 2.2 6.5 2.2s6.5-1 6.5-2.2V10" fill="none" stroke="#fff" strokeWidth="1.2" /></>
     ),
   },
   redis: {
@@ -380,14 +364,7 @@ export default function ToolIcon({ tool, size = 48, className = '' }) {
   const entry = TOOL_ICONS[tool] || TOOL_ICONS.files;
   const scale = size / 24;
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox={`0 0 ${size} ${size}`}
-      className={`tool-icon ${className}`.trim()}
-      role="img"
-      aria-label={tool}
-    >
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className={`tool-icon ${className}`.trim()} role="img" aria-label={tool}>
       <rect width={size} height={size} rx={size * 0.26} fill={entry.color} />
       <g transform={`scale(${scale})`}>{entry.icon}</g>
     </svg>
