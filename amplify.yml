@@ -3,10 +3,10 @@ frontend:
   phases:
     preBuild:
       commands:
-        - cd Frontend && npm ci --no-audit --no-fund
+        - (cd Frontend && npm ci --no-audit --no-fund)
     build:
       commands:
-        - cd Frontend && npm run build
+        - (cd Frontend && npm run build)
   artifacts:
     baseDirectory: Frontend/dist
     files:
