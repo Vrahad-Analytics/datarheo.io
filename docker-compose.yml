@@ -21,7 +21,7 @@ services:
       PORT: 5000
       MONGO_URI: mongodb://mongo:27017/datarheo
       JWT_SECRET: ${JWT_SECRET:-local-development-only-change-this-secret-1234}
-      FRONTEND_URL: http://localhost
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost,https://datarheo.io,https://app.datarheo.io}
       RESET_PASSWORD_URL: ${RESET_PASSWORD_URL:-http://localhost/reset-password}
       REDIS_URL: redis://redis:6379
       REDIS_REQUIRED: "true"

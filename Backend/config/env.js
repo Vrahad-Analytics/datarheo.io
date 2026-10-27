@@ -29,7 +29,10 @@ const config = {
     RESET_PASSWORD_URL: parsed.data.RESET_PASSWORD_URL
         || (isProduction ? "https://datarheo.io/reset-password" : "http://localhost:5173/reset-password"),
     isProduction,
-    allowedOrigins: parseList(parsed.data.FRONTEND_URL),
+    allowedOrigins: [...new Set([
+        ...parseList(parsed.data.FRONTEND_URL),
+        "https://app.datarheo.io"
+    ])],
     redisRequired: parsed.data.REDIS_REQUIRED === "true",
     trustProxy: parsed.data.TRUST_PROXY === "true" ? true : Number(parsed.data.TRUST_PROXY)
 };
