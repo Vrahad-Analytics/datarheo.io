@@ -83,7 +83,7 @@ app.use((error, req, res, next) => {
 const start = async () => {
     await connectDB();
     await connectRedis();
-    const server = app.listen(config.PORT, () => logger.info({ port: config.PORT }, "Server listening"));
+    const server = app.listen(config.PORT, () => console.log(`Server is listening on port ${config.PORT}`));
     const shutdown = async (signal) => {
         logger.info({ signal }, "Shutdown requested");
         server.close(async () => {
