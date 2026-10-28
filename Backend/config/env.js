@@ -31,7 +31,13 @@ const config = {
     isProduction,
     allowedOrigins: [...new Set([
         ...parseList(parsed.data.FRONTEND_URL),
-        "https://app.datarheo.io"
+        "https://app.datarheo.io",
+        ...(!isProduction ? [
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+            "http://localhost:5174",
+            "http://127.0.0.1:5174"
+        ] : [])
     ])],
     redisRequired: parsed.data.REDIS_REQUIRED === "true",
     trustProxy: parsed.data.TRUST_PROXY === "true" ? true : Number(parsed.data.TRUST_PROXY)
@@ -49,6 +55,9 @@ if (isProduction) {
     }
     if (config.COOKIE_DOMAIN && !config.COOKIE_DOMAIN.startsWith(".")) {
         throw new Error("COOKIE_DOMAIN must begin with a dot in production");
+    }
+    if (config.COOKIE_DOMAIN !== ".datarheo.io") {
+        throw new Error("COOKIE_DOMAIN must be .datarheo.io for cross-subdomain authentication");
     }
     if (!config.METRICS_TOKEN) {
         throw new Error("METRICS_TOKEN is required in production");

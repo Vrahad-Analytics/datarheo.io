@@ -39,4 +39,28 @@ const sendPasswordResetEmail = async (email, resetUrl) => {
     }
 };
 
-module.exports = { sendPasswordResetEmail };
+const sendRegistrationVerificationEmail = async (email, verificationCode) => {
+    const emailUser = process.env.EMAIL_USER;
+    const emailPassword = process.env.EMAIL_PASSWORD;
+    if (!emailUser || !emailPassword || emailUser.startsWith("replace-with") || emailPassword.startsWith("replace-with")) {
+        const error = new Error("Registration email verification requires EMAIL_USER and EMAIL_PASSWORD");
+        error.code = "EMAIL_CONFIGURATION_MISSING";
+        throw error;
+    }
+
+    try {
+        await transporter.sendMail({
+            from: emailUser,
+            to: email,
+            subject: "Verify your Datarheo email",
+            text: `Your Datarheo email verification code is ${verificationCode}. It expires in 10 minutes and can only be used once.`,
+            html: `<div style="font-family: Arial, sans-serif;"><h2>Verify your Datarheo email</h2><p>Enter this code to continue creating your account:</p><p style="font-size: 24px; font-weight: bold; letter-spacing: 4px;">${verificationCode}</p><p>This code expires in 10 minutes and can only be used once.</p></div>`
+        });
+    } catch (cause) {
+        const error = new Error("Registration email delivery failed", { cause });
+        error.code = "EMAIL_DELIVERY_FAILED";
+        throw error;
+    }
+};
+
+module.exports = { sendPasswordResetEmail, sendRegistrationVerificationEmail };

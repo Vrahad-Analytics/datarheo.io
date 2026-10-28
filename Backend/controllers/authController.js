@@ -21,9 +21,9 @@ const controller = (method, failureMessage) => async (req, res) => {
             return res.status(error.status).json({ message: error.message });
         }
         logger.error({ err: error }, failureMessage);
-        if (method === "requestPasswordReset" && error.code?.startsWith("EMAIL_")) {
+        if (["requestPasswordReset", "startRegistration"].includes(method) && error.code?.startsWith("EMAIL_")) {
             return res.status(503).json({
-                message: "Password reset email is unavailable right now. Please contact support."
+                message: "Email delivery is unavailable right now. Please try again later."
             });
         }
         return res.status(500).json({ message: failureMessage });
@@ -32,6 +32,8 @@ const controller = (method, failureMessage) => async (req, res) => {
 
 module.exports = {
     startRegistration: controller("startRegistration", "Could not start registration"),
+    verifyRegistrationEmail: controller("verifyRegistrationEmail", "Email verification failed"),
+    startAuthenticator: controller("startAuthenticator", "Could not start authenticator setup"),
     verifyAuthenticator: controller("verifyAuthenticator", "Authenticator verification failed"),
     setPassword: controller("setPassword", "Password setup failed"),
     login: controller("login", "Login failed"),

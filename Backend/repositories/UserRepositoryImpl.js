@@ -6,12 +6,31 @@ class UserRepositoryImpl extends UserRepository {
         return User.findOne({ businessId }).select(select);
     }
 
+    findRegistrationEmailChallenge(businessId) {
+        return User.findOne({ businessId }).select("+registrationEmailVerificationHash +registrationEmailVerificationExpiresAt");
+    }
+
+    consumeRegistrationEmailChallenge(userId, challengeHash, now) {
+        return User.findOneAndUpdate(
+            {
+                _id: userId,
+                registrationEmailVerificationHash: challengeHash,
+                registrationEmailVerificationExpiresAt: { $gt: now }
+            },
+            {
+                $set: { registrationEmailVerifiedAt: now },
+                $unset: { registrationEmailVerificationHash: 1, registrationEmailVerificationExpiresAt: 1 }
+            },
+            { returnDocument: "after" }
+        );
+    }
+
     findByBusinessIdOrEmail(businessId) {
         return User.findOne({ $or: [{ businessId }, { email: businessId }] });
     }
 
     findById(userId) {
-        return User.findById(userId);
+        return User.findById(userId).select("+sessionId");
     }
 
     findLoginChallenge(challengeHash, now) {
@@ -57,7 +76,8 @@ class UserRepositoryImpl extends UserRepository {
                     refreshTokenHash: 1,
                     refreshTokenExpiresAt: 1,
                     loginChallengeHash: 1,
-                    loginChallengeExpiresAt: 1
+                    loginChallengeExpiresAt: 1,
+                    sessionId: 1
                 }
             },
             { returnDocument: "after" }
@@ -68,12 +88,16 @@ class UserRepositoryImpl extends UserRepository {
         return user.save();
     }
 
-    updateRefreshToken(userId, refreshTokenHash, refreshTokenExpiresAt) {
-        return User.updateOne({ _id: userId }, { refreshTokenHash, refreshTokenExpiresAt });
+    updateRefreshToken(userId, refreshTokenHash, refreshTokenExpiresAt, sessionId) {
+        return User.updateOne({ _id: userId }, { refreshTokenHash, refreshTokenExpiresAt, sessionId });
     }
 
     revokeRefreshToken(refreshTokenHash) {
-        return User.updateOne({ refreshTokenHash }, { $unset: { refreshTokenHash: 1, refreshTokenExpiresAt: 1 } });
+        return User.updateOne({ refreshTokenHash }, { $unset: { refreshTokenHash: 1, refreshTokenExpiresAt: 1, sessionId: 1 } });
+    }
+
+    revokeSession(sessionId) {
+        return User.updateOne({ sessionId }, { $unset: { refreshTokenHash: 1, refreshTokenExpiresAt: 1, sessionId: 1 } });
     }
 }
 

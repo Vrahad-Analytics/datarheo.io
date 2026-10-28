@@ -10,8 +10,9 @@ const { generateSecret, generateSync } = require("otplib");
 const config = require("../config/env");
 const AuthServiceImpl = require("../services/AuthServiceImpl");
 
-test("registration persists first and last names", async () => {
+test("registration persists names and sends a business-email challenge before authenticator setup", async () => {
     let savedUser;
+    let verificationEmail;
     const repository = {
         findByBusinessIdOrEmail: async () => null,
         save: async (user) => {
@@ -19,7 +20,9 @@ test("registration persists first and last names", async () => {
             return user;
         }
     };
-    const service = new AuthServiceImpl(repository);
+    const service = new AuthServiceImpl(repository, undefined, async (email, code) => {
+        verificationEmail = { email, code };
+    });
 
     const result = await service.startRegistration({
         businessId: "ada@analytical.example",
@@ -30,6 +33,61 @@ test("registration persists first and last names", async () => {
     assert.equal(result.status, 200);
     assert.equal(savedUser.firstName, "Ada");
     assert.equal(savedUser.lastName, "Lovelace");
+    assert.match(result.body.message, /business email/);
+    assert.equal(result.body.qrCode, undefined);
+    assert.equal(verificationEmail.email, "ada@analytical.example");
+    assert.notEqual(savedUser.registrationEmailVerificationHash, verificationEmail.code);
+    assert.ok(savedUser.registrationEmailVerificationExpiresAt > new Date());
+});
+
+test("email ownership is required before authenticator enrollment and password creation", async () => {
+    let verificationCode;
+    let savedUser;
+    const repository = {
+        findByBusinessIdOrEmail: async () => null,
+        findRegistrationEmailChallenge: async () => savedUser,
+        consumeRegistrationEmailChallenge: async (_id, hash) => {
+            if (savedUser.registrationEmailVerificationHash !== hash) return null;
+            savedUser.registrationEmailVerifiedAt = new Date();
+            savedUser.registrationEmailVerificationHash = undefined;
+            savedUser.registrationEmailVerificationExpiresAt = undefined;
+            return savedUser;
+        },
+        findByBusinessId: async () => savedUser,
+        save: async (user) => {
+            savedUser = user;
+            return user;
+        }
+    };
+    const service = new AuthServiceImpl(repository, undefined, async (_email, code) => {
+        verificationCode = code;
+    });
+    const businessId = "ada@analytical.example";
+
+    await service.startRegistration({ businessId, firstName: "Ada", lastName: "Lovelace" });
+    await assert.rejects(
+        service.startAuthenticator({ businessId }),
+        { name: "AuthError", status: 400 }
+    );
+    await assert.rejects(
+        service.verifyRegistrationEmail({ businessId, verificationCode: "000000" }),
+        { name: "AuthError", status: 400 }
+    );
+
+    const emailVerified = await service.verifyRegistrationEmail({ businessId, verificationCode });
+    assert.equal(emailVerified.status, 200);
+    const authenticator = await service.startAuthenticator({ businessId });
+    const secret = new URL(authenticator.body.otpauthUri).searchParams.get("secret");
+    assert.ok(secret);
+    await service.verifyAuthenticator({ businessId, otp: generateSync({ secret }) });
+    const passwordSet = await service.setPassword({
+        businessId,
+        password: "secure registration password",
+        confirmPassword: "secure registration password"
+    });
+    assert.equal(passwordSet.status, 201);
+    assert.equal(savedUser.isVerified, true);
+    assert.equal(savedUser.registrationEmailVerificationHash, undefined);
 });
 
 test("MFA response and current-user endpoint expose the actual display name", async () => {
@@ -48,6 +106,9 @@ test("MFA response and current-user endpoint expose the actual display name", as
         findLoginChallenge: async () => user,
         consumeLoginChallenge: async () => user,
         updateRefreshToken: async () => {},
+        revokeSession: async (sessionId) => {
+            if (user.sessionId === sessionId) user.sessionId = null;
+        },
         findById: async () => user
     };
     const service = new AuthServiceImpl(repository);
@@ -64,6 +125,9 @@ test("MFA response and current-user endpoint expose the actual display name", as
     const profile = await service.getCurrentUser({ accessToken });
     assert.equal(profile.body.user.displayName, "Ada Lovelace");
     assert.equal(jwt.verify(accessToken, config.JWT_SECRET).userId, "user-123");
+    const refreshToken = login.cookies.find(({ name }) => name === "refreshToken").value;
+    await service.logout({ accessToken, refreshToken });
+    await assert.rejects(service.getCurrentUser({ accessToken }), { name: "AuthError", status: 401 });
 });
 
 test("forgot password sends a reset link without exposing the token in the URL query", async () => {

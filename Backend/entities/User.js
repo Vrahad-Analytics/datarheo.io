@@ -52,6 +52,29 @@ const userSchema = new mongoose.Schema(
             default: false
         },
 
+        registrationEmailVerificationHash: {
+            type: String,
+            select: false,
+            default: null
+        },
+
+        registrationEmailVerificationExpiresAt: {
+            type: Date,
+            select: false,
+            default: null
+        },
+
+        registrationEmailVerifiedAt: {
+            type: Date,
+            default: null
+        },
+
+        sessionId: {
+            type: String,
+            select: false,
+            default: null
+        },
+
         failedLoginAttempts: {
             type: Number,
             default: 0
