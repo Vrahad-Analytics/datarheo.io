@@ -97,6 +97,17 @@ const start = async () => {
     return server;
 };
 
-if (require.main === module) start().catch(() => process.exit(1));
+if (require.main === module) {
+    start().catch(async (error) => {
+        logger.fatal({ err: error }, "Server startup failed");
+        try {
+            await closeRedis();
+            await mongoose.disconnect();
+        } catch (cleanupError) {
+            logger.error({ err: cleanupError }, "Startup cleanup failed");
+        }
+        process.exitCode = 1;
+    });
+}
 
 module.exports = { app, start };

@@ -8,6 +8,22 @@ Form.Label = ({ children, ...props }) => <label {...props}>{children}</label>;
 Form.Control = ({ as = 'input', className = '', ...props }) => createElement(as, { ...props, className: `form-control ${className}`.trim() });
 const Button = ({ children, ...props }) => <button {...props}>{children}</button>;
 
+function getSafeReturnUrl() {
+  const fallback = 'https://app.datarheo.io/';
+  const requested = new URLSearchParams(window.location.search).get('returnTo');
+  if (!requested) return fallback;
+
+  try {
+    const target = new URL(requested);
+    if (target.username || target.password) return fallback;
+    if (target.origin === 'https://app.datarheo.io') return target.href;
+    if (import.meta.env.DEV && target.protocol === 'http:' && ['localhost', '127.0.0.1'].includes(target.hostname)) return target.href;
+  } catch {
+    return fallback;
+  }
+  return fallback;
+}
+
 export default function Login() {
   const [businessId, setBusinessId] = useState('');
   const [password, setPassword] = useState('');
@@ -84,7 +100,7 @@ export default function Login() {
         setLoginChallenge(result.loginChallenge);
         return;
       }
-      window.location.href = 'https://app.datarheo.io';
+      window.location.assign(getSafeReturnUrl());
     } catch (requestError) {
       const message = requestError instanceof TypeError
         ? 'Unable to reach the server. Please check the connection or API configuration.'

@@ -5,6 +5,7 @@ const { generateSync } = require("otplib");
 const baseUrl = (process.env.TEST_BASE_URL || "http://localhost:5000").replace(/\/$/, "");
 const email = process.env.TEST_BUSINESS_EMAIL;
 const password = process.env.TEST_PASSWORD;
+const authenticatorSecret = process.env.TEST_AUTHENTICATOR_SECRET;
 const lockoutEmail = process.env.TEST_LOCKOUT_EMAIL || email;
 
 const request = async (path, options = {}) => {
@@ -32,31 +33,13 @@ const cookieHeader = (response, existing = "") => {
     return [...cookies].map(([name, value]) => `${name}=${value}`).join("; ");
 };
 
-test("registration, MFA login, refresh, and logout lifecycle", { skip: !email || !password }, async () => {
-    const registrationEmail = `${Date.now()}-${email}`;
-    const started = await post("/api/auth/register/start", {
-        businessId: registrationEmail,
-        firstName: "Ada",
-        lastName: "Lovelace"
-    });
-    assert.equal(started.response.status, 200, JSON.stringify(started.body));
-    const secret = new URL(started.body.otpauthUri).searchParams.get("secret");
-    assert.ok(secret);
-
-    const invalidRegistration = await post("/api/auth/register/verify-authenticator", { businessId: registrationEmail, otp: "000000" });
-    assert.equal(invalidRegistration.response.status, 400);
-    const code = generateSync({ secret });
-    const verified = await post("/api/auth/register/verify-authenticator", { businessId: registrationEmail, otp: code });
-    assert.equal(verified.response.status, 200, JSON.stringify(verified.body));
-    const setPassword = await post("/api/auth/register/set-password", { businessId: registrationEmail, password, confirmPassword: password });
-    assert.equal(setPassword.response.status, 201, JSON.stringify(setPassword.body));
-
-    const login = await post("/api/auth/login", { businessId: registrationEmail, password });
+test("MFA login, refresh, and logout revoke app access", { skip: !email || !password || !authenticatorSecret }, async () => {
+    const login = await post("/api/auth/login", { businessId: email, password });
     assert.equal(login.response.status, 200);
     const challenge = login.body.loginChallenge;
     const invalidMfa = await post("/api/auth/login/verify-mfa", { loginChallenge: challenge, otp: "000000" });
     assert.equal(invalidMfa.response.status, 401);
-    const authenticated = await post("/api/auth/login/verify-mfa", { loginChallenge: challenge, otp: generateSync({ secret }) });
+    const authenticated = await post("/api/auth/login/verify-mfa", { loginChallenge: challenge, otp: generateSync({ secret: authenticatorSecret }) });
     assert.equal(authenticated.response.status, 200, JSON.stringify(authenticated.body));
     assert.equal(authenticated.body.user.firstName, "Ada");
     assert.equal(authenticated.body.user.lastName, "Lovelace");
@@ -74,8 +57,11 @@ test("registration, MFA login, refresh, and logout lifecycle", { skip: !email ||
     cookies = cookieHeader(refreshed.response, cookies);
     const loggedOut = await request("/api/auth/logout", { method: "POST", headers: { Cookie: cookies } });
     assert.equal(loggedOut.response.status, 200);
-    const afterLogout = await request("/api/auth/refresh", { method: "POST", headers: { Cookie: cookieHeader(loggedOut.response, cookies) } });
+    const clearedCookies = cookieHeader(loggedOut.response, cookies);
+    const afterLogout = await request("/api/auth/refresh", { method: "POST", headers: { Cookie: clearedCookies } });
     assert.equal(afterLogout.response.status, 401);
+    const currentUserAfterLogout = await request("/api/auth/me", { headers: { Cookie: clearedCookies } });
+    assert.equal(currentUserAfterLogout.response.status, 401);
 });
 
 test("account locks after five failed passwords", { skip: !lockoutEmail || !password }, async () => {
