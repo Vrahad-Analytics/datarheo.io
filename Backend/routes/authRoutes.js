@@ -1,10 +1,9 @@
 const express = require("express");
-const { startRegistration, verifyRegistrationEmail, startAuthenticator, verifyAuthenticator, setPassword, login, requestPasswordReset, resetPassword, verifyLoginMfa, refresh, logout, getCurrentUser } = require("../controllers/authController");
+const { startRegistration, startAuthenticator, verifyAuthenticator, setPassword, login, requestPasswordReset, resetPassword, verifyLoginMfa, refresh, logout, getCurrentUser } = require("../controllers/authController");
 const { loginLimiter, registrationLimiter } = require("../middleware/rateLimiters");
 const router = express.Router();
 
 router.post("/register/start", registrationLimiter, startRegistration);
-router.post("/register/verify-email", registrationLimiter, verifyRegistrationEmail);
 router.post("/register/start-authenticator", registrationLimiter, startAuthenticator);
 router.post("/register/verify-authenticator", registrationLimiter, verifyAuthenticator);
 router.post("/register/set-password", registrationLimiter, setPassword);

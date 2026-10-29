@@ -11,7 +11,6 @@ export default function Register() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ firstName: '', lastName: '', businessId: '', password: '', confirmPassword: '' });
   const [otp, setOtp] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
   const [step, setStep] = useState(1);
   const [qrCode, setQrCode] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -20,28 +19,6 @@ export default function Register() {
   function updateField(event) {
     setForm((current) => ({ ...current, [event.target.name]: event.target.value }));
     setError('');
-  }
-
-  async function resendVerificationCode() {
-    setError('');
-    setSubmitting(true);
-    try {
-      const response = await fetch(`${API_URL}/api/auth/register/start`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ businessId: form.businessId, firstName: form.firstName.trim(), lastName: form.lastName.trim() })
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.message || 'Could not resend the verification code.');
-      setVerificationCode('');
-    } catch (requestError) {
-      setError(requestError instanceof TypeError
-        ? 'Unable to reach the server. Please check the connection or API configuration.'
-        : requestError.message);
-    } finally {
-      setSubmitting(false);
-    }
   }
 
   async function handleSubmit(event) {
@@ -68,18 +45,15 @@ export default function Register() {
 
       if (step === 1) {
         await request('/register/start', { businessId: form.businessId, firstName: form.firstName.trim(), lastName: form.lastName.trim() });
+        const result = await request('/register/start-authenticator', { businessId: form.businessId });
+        setQrCode(result.qrCode);
         setStep(2);
+      } else if (step === 2 && !qrCode) {
+        const result = await request('/register/start-authenticator', { businessId: form.businessId });
+        setQrCode(result.qrCode);
       } else if (step === 2) {
-        await request('/register/verify-email', { businessId: form.businessId, verificationCode });
-        setStep(3);
-        const result = await request('/register/start-authenticator', { businessId: form.businessId });
-        setQrCode(result.qrCode);
-      } else if (step === 3 && !qrCode) {
-        const result = await request('/register/start-authenticator', { businessId: form.businessId });
-        setQrCode(result.qrCode);
-      } else if (step === 3) {
         await request('/register/verify-authenticator', { businessId: form.businessId, otp });
-        setStep(4);
+        setStep(3);
       } else {
         await request('/register/set-password', form);
         navigate('/login');
@@ -115,11 +89,10 @@ export default function Register() {
               </div>}
               <Form.Label htmlFor="business-id">Business email</Form.Label>
               <Form.Control type="email" id="business-id" name="businessId" autoComplete="email" placeholder="you@company.com" required value={form.businessId} readOnly={step > 1} onChange={updateField} />
-              {step === 2 && <div className="authenticator-enrollment"><p>We sent a 6-digit verification code to your business email. It expires in 10 minutes.</p><Form.Label htmlFor="registration-email-code">Email verification code</Form.Label><Form.Control type="text" id="registration-email-code" inputMode="numeric" pattern="[0-9]{6}" maxLength="6" autoComplete="one-time-code" required value={verificationCode} onChange={(event) => { setVerificationCode(event.target.value.replace(/\D/g, '').slice(0, 6)); setError(''); }} /><button type="button" className="login-text-button" onClick={resendVerificationCode} disabled={submitting}>Resend code</button></div>}
-              {step === 3 && <div className="authenticator-enrollment"><p>Scan this QR code in Google Authenticator, Microsoft Authenticator, or another TOTP app.</p>{qrCode && <><img src={qrCode} alt="Authenticator setup QR code" className="authenticator-qr" /><Form.Label htmlFor="registration-otp">6-digit authenticator code</Form.Label><Form.Control type="text" id="registration-otp" inputMode="numeric" pattern="[0-9]{6}" maxLength="6" required value={otp} onChange={(event) => { setOtp(event.target.value.replace(/\D/g, '').slice(0, 6)); setError(''); }} /></>}</div>}
-              {step === 4 && <><Form.Label htmlFor="register-password">Enter password</Form.Label><Form.Control type="password" id="register-password" name="password" autoComplete="new-password" minLength={12} required value={form.password} onChange={updateField} /><Form.Label htmlFor="confirm-password">Confirm password</Form.Label><Form.Control type="password" id="confirm-password" name="confirmPassword" autoComplete="new-password" minLength={12} required value={form.confirmPassword} onChange={updateField} /></>}
+              {step === 2 && <div className="authenticator-enrollment"><p>Scan this QR code in Google Authenticator, Microsoft Authenticator, or another TOTP app.</p>{qrCode && <><img src={qrCode} alt="Authenticator setup QR code" className="authenticator-qr" /><Form.Label htmlFor="registration-otp">6-digit authenticator code</Form.Label><Form.Control type="text" id="registration-otp" inputMode="numeric" pattern="[0-9]{6}" maxLength="6" required value={otp} onChange={(event) => { setOtp(event.target.value.replace(/\D/g, '').slice(0, 6)); setError(''); }} /></>}</div>}
+              {step === 3 && <><Form.Label htmlFor="register-password">Enter password</Form.Label><Form.Control type="password" id="register-password" name="password" autoComplete="new-password" minLength={12} required value={form.password} onChange={updateField} /><Form.Label htmlFor="confirm-password">Confirm password</Form.Label><Form.Control type="password" id="confirm-password" name="confirmPassword" autoComplete="new-password" minLength={12} required value={form.confirmPassword} onChange={updateField} /></>}
               {error && <div className="login-error" role="alert">{error}</div>}
-              <Button type="submit" className="cta login-submit login-submit--shine" disabled={submitting}>{submitting ? 'Please wait...' : step === 1 ? 'Verify business email' : step === 2 ? 'Continue' : step === 3 ? qrCode ? 'Verify authenticator' : 'Set up authenticator' : 'Create account'}</Button>
+              <Button type="submit" className="cta login-submit login-submit--shine" disabled={submitting}>{submitting ? 'Please wait...' : step === 1 ? 'Set up authenticator' : step === 2 ? qrCode ? 'Verify authenticator' : 'Set up authenticator' : 'Create account'}</Button>
             </Form>
             <p className="login-help">Already have an account? <Link to="/login">Sign in</Link></p>
           </div>

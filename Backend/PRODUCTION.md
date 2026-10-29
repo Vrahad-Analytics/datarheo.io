@@ -2,7 +2,7 @@
 
 ## Environment
 
-Copy `.env.example` into the deployment secret store. Set a randomly generated `JWT_SECRET` of at least 32 characters, production `NODE_ENV`, `FRONTEND_URL` to one or more HTTPS origins, and a long random `METRICS_TOKEN`. Configure `EMAIL_USER` and `EMAIL_PASSWORD` because registration now verifies business-email ownership before authenticator enrollment. Never commit `.env` or SMTP credentials.
+Copy `.env.example` into the deployment secret store. Set a randomly generated `JWT_SECRET` of at least 32 characters, production `NODE_ENV`, `FRONTEND_URL` to one or more HTTPS origins, and a long random `METRICS_TOKEN`. Configure `EMAIL_USER` and `EMAIL_PASSWORD` if password-reset emails are required. Account registration does not send an email verification code; users enroll an authenticator during signup. Never commit `.env` or SMTP credentials.
 
 ## HTTPS and cookies
 
@@ -24,7 +24,7 @@ When running with Docker Compose, the backend loads these mail settings from `Ba
 
 For local development, set `COOKIE_DOMAIN=` (empty), `FRONTEND_URL=http://localhost:5173`, and `AUTH_API_BASE_URL=http://localhost:5000`. Start the auth API on port 5000, the workspace API on port 8000, the marketing frontend on port 5173, and the workspace Vite frontend on port 3000. The browser treats the loopback ports as one cookie host; the configured CORS allowlists permit those development origins.
 
-1. Open the marketing site's registration page, register with a mailbox you can access, enter the emailed 6-digit code, enroll an authenticator, and set a password. Registration must not return an authenticator QR code before the email code is verified.
+1. Open the marketing site's registration page, enter a business email and name, enroll an authenticator, and set a password. Registration does not send an email verification code.
 2. Open `https://app.datarheo.io` (or `http://localhost:3000`) in a private browser window. It should show only a session-check screen, then navigate to `https://datarheo.io/login?returnTo=...` (or the local marketing login) without rendering dashboard content.
 3. Sign in through the marketing login, complete MFA, and verify that the browser returns to the preserved app destination. Reload the app; the dashboard should remain accessible with the HttpOnly cookies.
 4. Sign out from the app. Reopen/refresh the app and confirm it returns to login. A request such as `curl -i https://api.app.datarheo.io/api/syncs` without cookies should return `401`; a logged-out browser must receive `401` from the API even if it still presents an old access token.

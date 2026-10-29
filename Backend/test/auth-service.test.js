@@ -10,18 +10,19 @@ const { generateSecret, generateSync } = require("otplib");
 const config = require("../config/env");
 const AuthServiceImpl = require("../services/AuthServiceImpl");
 
-test("registration persists names and sends a business-email challenge before authenticator setup", async () => {
+test("registration skips email verification and proceeds directly to authenticator setup", async () => {
     let savedUser;
-    let verificationEmail;
+    let emailSent = false;
     const repository = {
         findByBusinessIdOrEmail: async () => null,
+        findByBusinessId: async () => savedUser,
         save: async (user) => {
             savedUser = user;
             return user;
         }
     };
-    const service = new AuthServiceImpl(repository, undefined, async (email, code) => {
-        verificationEmail = { email, code };
+    const service = new AuthServiceImpl(repository, async () => {
+        emailSent = true;
     });
 
     const result = await service.startRegistration({
@@ -33,61 +34,23 @@ test("registration persists names and sends a business-email challenge before au
     assert.equal(result.status, 200);
     assert.equal(savedUser.firstName, "Ada");
     assert.equal(savedUser.lastName, "Lovelace");
-    assert.match(result.body.message, /business email/);
-    assert.equal(result.body.qrCode, undefined);
-    assert.equal(verificationEmail.email, "ada@analytical.example");
-    assert.notEqual(savedUser.registrationEmailVerificationHash, verificationEmail.code);
-    assert.ok(savedUser.registrationEmailVerificationExpiresAt > new Date());
-});
-
-test("email ownership is required before authenticator enrollment and password creation", async () => {
-    let verificationCode;
-    let savedUser;
-    const repository = {
-        findByBusinessIdOrEmail: async () => null,
-        findRegistrationEmailChallenge: async () => savedUser,
-        consumeRegistrationEmailChallenge: async (_id, hash) => {
-            if (savedUser.registrationEmailVerificationHash !== hash) return null;
-            savedUser.registrationEmailVerifiedAt = new Date();
-            savedUser.registrationEmailVerificationHash = undefined;
-            savedUser.registrationEmailVerificationExpiresAt = undefined;
-            return savedUser;
-        },
-        findByBusinessId: async () => savedUser,
-        save: async (user) => {
-            savedUser = user;
-            return user;
-        }
-    };
-    const service = new AuthServiceImpl(repository, undefined, async (_email, code) => {
-        verificationCode = code;
-    });
-    const businessId = "ada@analytical.example";
-
-    await service.startRegistration({ businessId, firstName: "Ada", lastName: "Lovelace" });
-    await assert.rejects(
-        service.startAuthenticator({ businessId }),
-        { name: "AuthError", status: 400 }
-    );
-    await assert.rejects(
-        service.verifyRegistrationEmail({ businessId, verificationCode: "000000" }),
-        { name: "AuthError", status: 400 }
-    );
-
-    const emailVerified = await service.verifyRegistrationEmail({ businessId, verificationCode });
-    assert.equal(emailVerified.status, 200);
-    const authenticator = await service.startAuthenticator({ businessId });
+    assert.match(result.body.message, /authenticator/);
+    assert.equal(emailSent, false);
+    const authenticator = await service.startAuthenticator({ businessId: "ada@analytical.example" });
+    assert.match(authenticator.body.qrCode, /^data:image\/png;base64,/);
     const secret = new URL(authenticator.body.otpauthUri).searchParams.get("secret");
     assert.ok(secret);
-    await service.verifyAuthenticator({ businessId, otp: generateSync({ secret }) });
+    await service.verifyAuthenticator({
+        businessId: "ada@analytical.example",
+        otp: generateSync({ secret })
+    });
     const passwordSet = await service.setPassword({
-        businessId,
+        businessId: "ada@analytical.example",
         password: "secure registration password",
         confirmPassword: "secure registration password"
     });
     assert.equal(passwordSet.status, 201);
     assert.equal(savedUser.isVerified, true);
-    assert.equal(savedUser.registrationEmailVerificationHash, undefined);
 });
 
 test("MFA response and current-user endpoint expose the actual display name", async () => {
@@ -121,7 +84,9 @@ test("MFA response and current-user endpoint expose the actual display name", as
     assert.equal(login.body.user.displayName, "Ada Lovelace");
     assert.equal(login.body.user.firstName, "Ada");
     assert.equal(login.body.user.lastName, "Lovelace");
-    const accessToken = login.cookies.find(({ name }) => name === "accessToken").value;
+    const accessCookie = login.cookies.find(({ name }) => name === "accessToken");
+    if (config.NODE_ENV !== "production") assert.equal(accessCookie.options.domain, undefined);
+    const accessToken = accessCookie.value;
     const profile = await service.getCurrentUser({ accessToken });
     assert.equal(profile.body.user.displayName, "Ada Lovelace");
     assert.equal(jwt.verify(accessToken, config.JWT_SECRET).userId, "user-123");

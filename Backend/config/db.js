@@ -9,7 +9,7 @@ const connectDB = async () => {
                maxPoolSize: Number(process.env.MONGO_MAX_POOL_SIZE || 20), minPoolSize: Number(process.env.MONGO_MIN_POOL_SIZE || 2), retryWrites: true, w: "majority", serverSelectionTimeoutMS: 5000, socketTimeoutMS: 45000
           });
           const actualDB = mongoose.connection.name;
-          logger.info({ database: actualDB }, "MongoDB connected");
+          console.log(`Connected to mongo db ${actualDB}`);
           mongoose.connection.on("error", (error) => logger.error({ err: error }, "MongoDB connection error"));
           mongoose.connection.on("disconnected", () => logger.warn("MongoDB disconnected"));
           mongoose.connection.on("reconnected", () => logger.info("MongoDB reconnected"));

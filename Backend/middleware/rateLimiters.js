@@ -7,8 +7,7 @@ const logger = require("../utils/logger");
 const redis = config.REDIS_URL ? new Redis(config.REDIS_URL, { lazyConnect: true, maxRetriesPerRequest: 2 }) : null;
 let redisReady = false;
 
-if (!redis && config.isProduction) logger.warn("REDIS_URL is not configured; rate limits are local to this instance");
-if (redis) redis.on("error", (error) => logger.error({ err: error }, "Redis connection error"));
+if (redis && config.redisRequired) redis.on("error", (error) => logger.error({ err: error }, "Redis connection error"));
 
 const connectRedis = async () => {
     if (!redis || redisReady) return;
@@ -19,7 +18,6 @@ const connectRedis = async () => {
     } catch (error) {
         redisReady = false;
         if (config.redisRequired) throw error;
-        logger.warn({ err: error }, "Redis unavailable; using in-memory rate limits");
         redis.disconnect();
     }
 };

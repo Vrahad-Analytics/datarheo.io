@@ -6,25 +6,6 @@ class UserRepositoryImpl extends UserRepository {
         return User.findOne({ businessId }).select(select);
     }
 
-    findRegistrationEmailChallenge(businessId) {
-        return User.findOne({ businessId }).select("+registrationEmailVerificationHash +registrationEmailVerificationExpiresAt");
-    }
-
-    consumeRegistrationEmailChallenge(userId, challengeHash, now) {
-        return User.findOneAndUpdate(
-            {
-                _id: userId,
-                registrationEmailVerificationHash: challengeHash,
-                registrationEmailVerificationExpiresAt: { $gt: now }
-            },
-            {
-                $set: { registrationEmailVerifiedAt: now },
-                $unset: { registrationEmailVerificationHash: 1, registrationEmailVerificationExpiresAt: 1 }
-            },
-            { returnDocument: "after" }
-        );
-    }
-
     findByBusinessIdOrEmail(businessId) {
         return User.findOne({ $or: [{ businessId }, { email: businessId }] });
     }
