@@ -54,7 +54,9 @@ const publicUser = (user) => ({
 });
 const cookieOptions = (maxAge) => ({
     httpOnly: true,secure: config.NODE_ENV === "production",
-    sameSite: "strict", domain: config.COOKIE_DOMAIN || undefined,maxAge,path: "/"
+    sameSite: "strict",
+    domain: config.NODE_ENV === "production" ? config.COOKIE_DOMAIN || undefined : undefined,
+    maxAge,path: "/"
 });
 
 class AuthError extends Error {

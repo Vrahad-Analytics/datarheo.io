@@ -9,7 +9,8 @@ Form.Control = ({ as = 'input', className = '', ...props }) => createElement(as,
 const Button = ({ children, ...props }) => <button {...props}>{children}</button>;
 
 function getSafeReturnUrl() {
-  const fallback = 'https://app.datarheo.io/';
+  const isLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+  const fallback = isLocalhost ? 'http://localhost:3000/' : 'https://app.datarheo.io/';
   const requested = new URLSearchParams(window.location.search).get('returnTo');
   if (!requested) return fallback;
 
@@ -17,7 +18,7 @@ function getSafeReturnUrl() {
     const target = new URL(requested);
     if (target.username || target.password) return fallback;
     if (target.origin === 'https://app.datarheo.io') return target.href;
-    if (import.meta.env.DEV && target.protocol === 'http:' && ['localhost', '127.0.0.1'].includes(target.hostname)) return target.href;
+    if (target.protocol === 'http:' && ['localhost', '127.0.0.1'].includes(target.hostname)) return target.href;
   } catch {
     return fallback;
   }

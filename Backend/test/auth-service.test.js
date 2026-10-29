@@ -84,7 +84,9 @@ test("MFA response and current-user endpoint expose the actual display name", as
     assert.equal(login.body.user.displayName, "Ada Lovelace");
     assert.equal(login.body.user.firstName, "Ada");
     assert.equal(login.body.user.lastName, "Lovelace");
-    const accessToken = login.cookies.find(({ name }) => name === "accessToken").value;
+    const accessCookie = login.cookies.find(({ name }) => name === "accessToken");
+    if (config.NODE_ENV !== "production") assert.equal(accessCookie.options.domain, undefined);
+    const accessToken = accessCookie.value;
     const profile = await service.getCurrentUser({ accessToken });
     assert.equal(profile.body.user.displayName, "Ada Lovelace");
     assert.equal(jwt.verify(accessToken, config.JWT_SECRET).userId, "user-123");
