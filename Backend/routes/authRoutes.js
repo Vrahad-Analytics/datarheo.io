@@ -1,5 +1,5 @@
 const express = require("express");
-const { startRegistration, startAuthenticator, verifyAuthenticator, setPassword, login, requestPasswordReset, resetPassword, verifyLoginMfa, refresh, logout, getCurrentUser } = require("../controllers/authController");
+const { startRegistration, startAuthenticator, verifyAuthenticator, setPassword, login, requestPasswordReset, resetPassword, verifyLoginMfa, exchangeTabSessionHandoff, refresh, logout, getCurrentUser } = require("../controllers/authController");
 const { loginLimiter, registrationLimiter } = require("../middleware/rateLimiters");
 const router = express.Router();
 
@@ -12,6 +12,7 @@ router.post("/forgot-password", loginLimiter, requestPasswordReset);
 router.post("/reset-password", loginLimiter, resetPassword);
 router.post("/login/verify-mfa", loginLimiter, verifyLoginMfa);
 router.post("/login/verify-otp", loginLimiter, verifyLoginMfa);
+router.post("/tab-session/exchange", loginLimiter, exchangeTabSessionHandoff);
 router.post("/refresh", refresh);
 router.post("/logout", logout);
 router.get("/me", getCurrentUser);

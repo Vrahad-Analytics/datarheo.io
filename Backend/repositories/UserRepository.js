@@ -42,6 +42,34 @@ class UserRepository {
     revokeRefreshToken() {
         throw new Error("revokeRefreshToken must be implemented");
     }
+
+    createAuthSession() {
+        throw new Error("createAuthSession must be implemented");
+    }
+
+    findAuthSession() {
+        throw new Error("findAuthSession must be implemented");
+    }
+
+    findAuthSessionByRefreshToken() {
+        throw new Error("findAuthSessionByRefreshToken must be implemented");
+    }
+
+    consumeTabSessionHandoff() {
+        throw new Error("consumeTabSessionHandoff must be implemented");
+    }
+
+    rotateAuthSessionRefreshToken() {
+        throw new Error("rotateAuthSessionRefreshToken must be implemented");
+    }
+
+    revokeAuthSession() {
+        throw new Error("revokeAuthSession must be implemented");
+    }
+
+    revokeAllAuthSessions() {
+        throw new Error("revokeAllAuthSessions must be implemented");
+    }
 }
 
 module.exports = UserRepository;

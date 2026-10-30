@@ -95,6 +95,115 @@ test("MFA response and current-user endpoint expose the actual display name", as
     await assert.rejects(service.getCurrentUser({ accessToken }), { name: "AuthError", status: 401 });
 });
 
+test("tab sessions refresh independently and logout revokes only the selected tab", async () => {
+    const secret = generateSecret();
+    const user = {
+        _id: "user-tabs",
+        businessId: "ada@analytical.example",
+        email: "ada@analytical.example",
+        firstName: "Ada",
+        lastName: "Lovelace",
+        isVerified: true,
+        authenticatorVerified: true,
+        authenticatorSecret: secret
+    };
+    const sessions = new Map();
+    const repository = {
+        findLoginChallenge: async () => user,
+        consumeLoginChallenge: async () => user,
+        findById: async () => user,
+        findRefreshToken: async () => null,
+        createAuthSession: async (session) => sessions.set(session.sessionId, { ...session }),
+        findAuthSession: async (sessionId) => sessions.get(sessionId),
+        findAuthSessionByRefreshToken: async (refreshTokenHash) => (
+            [...sessions.values()].find((session) => session.refreshTokenHash === refreshTokenHash)
+        ),
+        consumeTabSessionHandoff: async (handoffHash, now) => {
+            const session = [...sessions.values()].find((candidate) => (
+                candidate.handoffHash === handoffHash && candidate.handoffExpiresAt > now
+            ));
+            if (!session) return null;
+            delete session.handoffHash;
+            delete session.handoffExpiresAt;
+            return session;
+        },
+        rotateAuthSessionRefreshToken: async (sessionId, oldHash, nextHash) => {
+            const session = sessions.get(sessionId);
+            if (!session || session.refreshTokenHash !== oldHash) return { matchedCount: 0 };
+            session.refreshTokenHash = nextHash;
+            return { matchedCount: 1 };
+        },
+        revokeAuthSession: async (sessionId) => sessions.delete(sessionId)
+    };
+    const service = new AuthServiceImpl(repository);
+    const createTabSession = (loginChallenge) => service.verifyLoginMfa({
+        loginChallenge,
+        otp: generateSync({ secret }),
+        tabSession: true
+    });
+
+    const firstLogin = await createTabSession("a".repeat(96));
+    const secondLogin = await createTabSession("b".repeat(96));
+    assert.ok(firstLogin.body.tabSessionHandoff);
+    assert.equal(firstLogin.body.tabSession, undefined);
+    const first = await service.exchangeTabSessionHandoff({
+        handoffToken: firstLogin.body.tabSessionHandoff
+    });
+    const second = await service.exchangeTabSessionHandoff({
+        handoffToken: secondLogin.body.tabSessionHandoff
+    });
+    assert.deepEqual(first.cookies, []);
+    assert.ok(first.body.tabSession);
+    assert.ok(second.body.tabSession);
+    await assert.rejects(
+        service.exchangeTabSessionHandoff({ handoffToken: firstLogin.body.tabSessionHandoff }),
+        { name: "AuthError", status: 401 }
+    );
+    assert.notEqual(
+        jwt.verify(first.body.tabSession.accessToken, config.JWT_SECRET).sessionId,
+        jwt.verify(second.body.tabSession.accessToken, config.JWT_SECRET).sessionId
+    );
+
+    const firstAccess = first.body.tabSession.accessToken;
+    const firstRefresh = first.body.tabSession.refreshToken;
+    const firstPayload = jwt.verify(firstAccess, config.JWT_SECRET);
+    assert.equal(firstPayload.exp - firstPayload.iat, 15 * 60);
+    const firstRecord = sessions.get(firstPayload.sessionId);
+    assert.equal(firstRecord.refreshTokenExpiresAt, undefined);
+    assert.equal((await service.getCurrentUser({ accessToken: firstAccess })).body.user.id, user._id);
+    const expiredAccess = jwt.sign(
+        { userId: user._id, sessionId: firstPayload.sessionId },
+        config.JWT_SECRET,
+        { expiresIn: -1 }
+    );
+    await assert.rejects(
+        service.getCurrentUser({ accessToken: expiredAccess }),
+        { name: "AuthError", status: 401 }
+    );
+
+    const renewed = await service.refresh({}, { refreshToken: firstRefresh });
+    assert.deepEqual(renewed.cookies, []);
+    assert.ok(renewed.body.tabSession);
+    await assert.rejects(
+        service.refresh({}, { refreshToken: firstRefresh }),
+        { name: "AuthError", status: 401 }
+    );
+
+    await service.logout({
+        accessToken: renewed.body.tabSession.accessToken,
+        refreshToken: renewed.body.tabSession.refreshToken,
+        tabSession: true
+    });
+    await assert.rejects(
+        service.getCurrentUser({ accessToken: renewed.body.tabSession.accessToken }),
+        { name: "AuthError", status: 401 }
+    );
+    assert.equal(
+        (await service.getCurrentUser({ accessToken: second.body.tabSession.accessToken })).body.user.id,
+        user._id
+    );
+});
+
 test("forgot password sends a reset link without exposing the token in the URL query", async () => {
     const user = {
         _id: "user-456",
