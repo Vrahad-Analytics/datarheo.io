@@ -50,9 +50,12 @@ The development server opens the site automatically at `http://localhost:3000`.
 
 ```bash
 npm run dev      # Start the development server
-npm run build    # Create a production build in dist/
+npm run build    # Build dist/ and emit static entry points for SPA routes
 npm run preview 
 ```
+
+The production build includes `/login/`, `/register/`, and `/reset-password/`
+entry points so static hosting can serve React Router routes directly.
 
 ## Styling
 

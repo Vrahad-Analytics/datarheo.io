@@ -4,11 +4,24 @@ const logger = require("../utils/logger");
 const authService = new AuthServiceImpl();
 const { AuthError } = AuthServiceImpl;
 
+function authCredentials(req) {
+    const bearerToken = /^Bearer\s+(.+)$/i.exec(req.get("authorization") || "")?.[1];
+    return {
+        ...req.cookies,
+        ...req.body,
+        accessToken: bearerToken || req.body?.accessToken || req.cookies?.accessToken,
+        refreshToken: req.body?.refreshToken || req.cookies?.refreshToken,
+        tabSession: Boolean(req.body?.tabSession || req.body?.refreshToken)
+    };
+}
+
 const controller = (method, failureMessage) => async (req, res) => {
     try {
-        const result = method === "refresh" || method === "logout" || method === "getCurrentUser"
-            ? await authService[method](req.cookies)
-            : await authService[method](req.body);
+        const result = method === "getCurrentUser" || method === "logout"
+            ? await authService[method](authCredentials(req))
+            : method === "refresh"
+                ? await authService[method](req.cookies, req.body)
+                : await authService[method](req.body);
         for (const cookie of result.cookies || []) {
             res.cookie(cookie.name, cookie.value, cookie.options);
         }
@@ -39,6 +52,7 @@ module.exports = {
     requestPasswordReset: controller("requestPasswordReset", "Could not request password reset"),
     resetPassword: controller("resetPassword", "Could not reset password"),
     verifyLoginMfa: controller("verifyLoginMfa", "Login failed"),
+    exchangeTabSessionHandoff: controller("exchangeTabSessionHandoff", "Could not establish tab session"),
     refresh: controller("refresh", "Could not refresh session"),
     logout: controller("logout", "Could not log out"),
     getCurrentUser: controller("getCurrentUser", "Could not retrieve current user")

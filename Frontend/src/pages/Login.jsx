@@ -25,6 +25,14 @@ function getSafeReturnUrl() {
   return fallback;
 }
 
+function usesTabSession(returnUrl) {
+  const target = new URL(returnUrl);
+  return target.origin === 'https://app.datarheo.io'
+    || (target.protocol === 'http:'
+      && ['localhost', '127.0.0.1'].includes(target.hostname)
+      && target.port === '3000');
+}
+
 export default function Login() {
   const [businessId, setBusinessId] = useState('');
   const [password, setPassword] = useState('');
@@ -82,10 +90,14 @@ export default function Login() {
     setError('');
     try {
       const endpoint = mfaRequired ? '/api/auth/login/verify-mfa' : '/api/auth/login';
+      const returnUrl = getSafeReturnUrl();
+      const tabSession = mfaRequired && usesTabSession(returnUrl);
       const response = await apiFetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(mfaRequired ? { loginChallenge, otp } : { businessId: trimmedBusinessId, password })
+        body: JSON.stringify(mfaRequired
+          ? { loginChallenge, otp, ...(tabSession ? { tabSession: true } : {}) }
+          : { businessId: trimmedBusinessId, password })
       });
       const result = await response.json();
       if (!response.ok) {
@@ -101,7 +113,16 @@ export default function Login() {
         setLoginChallenge(result.loginChallenge);
         return;
       }
-      window.location.assign(getSafeReturnUrl());
+      if (tabSession) {
+        if (typeof result.tabSessionHandoff !== 'string') {
+          throw new Error('Could not establish a tab-specific session.');
+        }
+        const target = new URL(returnUrl);
+        target.hash = new URLSearchParams({ tabSession: result.tabSessionHandoff }).toString();
+        window.location.assign(target.href);
+      } else {
+        window.location.assign(returnUrl);
+      }
     } catch (requestError) {
       const message = requestError instanceof TypeError
         ? 'Unable to reach the server. Please check the connection or API configuration.'

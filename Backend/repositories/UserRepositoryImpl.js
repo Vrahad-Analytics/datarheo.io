@@ -1,4 +1,5 @@
 const User = require("../entities/User");
+const AuthSession = require("../entities/AuthSession");
 const UserRepository = require("./UserRepository");
 
 class UserRepositoryImpl extends UserRepository {
@@ -79,6 +80,45 @@ class UserRepositoryImpl extends UserRepository {
 
     revokeSession(sessionId) {
         return User.updateOne({ sessionId }, { $unset: { refreshTokenHash: 1, refreshTokenExpiresAt: 1, sessionId: 1 } });
+    }
+
+    createAuthSession(session) {
+        return AuthSession.create(session);
+    }
+
+    findAuthSession(sessionId) {
+        return AuthSession.findOne({ sessionId }).lean();
+    }
+
+    findAuthSessionByRefreshToken(refreshTokenHash) {
+        return AuthSession.findOne({ refreshTokenHash }).select("+refreshTokenHash").lean();
+    }
+
+    consumeTabSessionHandoff(handoffHash, now) {
+        return AuthSession.findOneAndUpdate(
+            { handoffHash, handoffExpiresAt: { $gt: now } },
+            { $unset: { handoffHash: 1, handoffExpiresAt: 1 } },
+            { returnDocument: "after" }
+        ).select("+refreshTokenHash").lean();
+    }
+
+    rotateAuthSessionRefreshToken(sessionId, currentHash, nextHash) {
+        return AuthSession.updateOne(
+            { sessionId, refreshTokenHash: currentHash },
+            { $set: { refreshTokenHash: nextHash, updatedAt: new Date() } }
+        );
+    }
+
+    revokeAuthSession(sessionId) {
+        return AuthSession.deleteOne({ sessionId });
+    }
+
+    revokeAuthSessionByRefreshToken(refreshTokenHash) {
+        return AuthSession.deleteOne({ refreshTokenHash });
+    }
+
+    revokeAllAuthSessions(userId) {
+        return AuthSession.deleteMany({ userId });
     }
 }
 
